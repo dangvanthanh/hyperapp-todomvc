@@ -31,7 +31,7 @@ function h(type, props) {
 
 function app(props, container) {
   var root = (container = container || document.body).children[0];
-  var node = elementToNode(root, [].map);
+  var node = toVNode(root, [].map);
   var callbacks = [];
   var skipRender;
   var globalState;
@@ -48,7 +48,7 @@ function app(props, container) {
   }
 
   function render() {
-    flush(root = patch(container, root, node, node = props.view(globalState, globalActions), skipRender = !skipRender));
+    flush(root = patchElement(container, root, node, node = props.view(globalState, globalActions), skipRender = !skipRender));
   }
 
   function flush(cb) {
@@ -57,9 +57,9 @@ function app(props, container) {
     }
   }
 
-  function elementToNode(element, map) {
+  function toVNode(element, map) {
     return element && h(element.tagName.toLowerCase(), {}, map.call(element.childNodes, function (element) {
-      return element.nodeType === 3 ? element.nodeValue : elementToNode(element, map);
+      return element.nodeType === 3 ? element.nodeValue : toVNode(element, map);
     }));
   }
 
@@ -81,9 +81,13 @@ function app(props, container) {
 
   function initActions(state, actions, source) {
     Object.keys(source || {}).map(function (i) {
-      typeof source[i] === "function" ? actions[i] = function (data) {
-        return typeof (data = source[i](state, actions, data)) === "function" ? data(update) : update(data);
-      } : initActions(state[i] || (state[i] = {}), actions[i] = {}, source[i]);
+      if (typeof source[i] === "function") {
+        actions[i] = function (data) {
+          return typeof (data = source[i](state, actions, data)) === "function" ? data(update) : update(data);
+        };
+      } else {
+        initActions(state[i] || (state[i] = {}), actions[i] = {}, source[i]);
+      }
     });
 
     function update(data) {
@@ -180,7 +184,7 @@ function app(props, container) {
     }
   }
 
-  function patch(parent, element, oldNode, node, isSVG, nextSibling) {
+  function patchElement(parent, element, oldNode, node, isSVG, nextSibling) {
     if (oldNode == null) {
       element = parent.insertBefore(createElement(node, isSVG), element);
     } else if (node.type != null && node.type === oldNode.type) {
@@ -224,19 +228,19 @@ function app(props, container) {
 
         if (null == newKey) {
           if (null == oldKey) {
-            patch(element, oldElement, oldChild, newChild, isSVG);
+            patchElement(element, oldElement, oldChild, newChild, isSVG);
             j++;
           }
           i++;
         } else {
           if (oldKey === newKey) {
-            patch(element, keyedNode[0], keyedNode[1], newChild, isSVG);
+            patchElement(element, keyedNode[0], keyedNode[1], newChild, isSVG);
             i++;
           } else if (keyedNode[0]) {
             element.insertBefore(keyedNode[0], oldElement);
-            patch(element, keyedNode[0], keyedNode[1], newChild, isSVG);
+            patchElement(element, keyedNode[0], keyedNode[1], newChild, isSVG);
           } else {
-            patch(element, oldElement, null, newChild, isSVG);
+            patchElement(element, oldElement, null, newChild, isSVG);
           }
 
           j++;
@@ -277,6 +281,12 @@ var actions = {
     return {
       input: e.target.value
     };
+  },
+  add: function add(state) {
+    return {
+      input: '',
+      todos: state.todos.concat({ done: false, value: state.input })
+    };
   }
 };
 
@@ -286,110 +296,145 @@ var state = {
   todos: []
 };
 
+var Header = function Header() {
+  return h(
+    "header",
+    { className: "header" },
+    h(
+      "h1",
+      null,
+      "todos"
+    )
+  );
+};
+
+var Footer = function Footer() {
+  return h(
+    "footer",
+    { className: "info" },
+    h(
+      "p",
+      null,
+      "Double-click to edit a todo"
+    ),
+    h(
+      "p",
+      null,
+      "Written by ",
+      h(
+        "a",
+        { href: "http://dangthanh.org" },
+        "Dang Van Thanh"
+      )
+    ),
+    h(
+      "p",
+      null,
+      "Part of ",
+      h(
+        "a",
+        { href: "http://todomvc.com" },
+        "TodoMVC"
+      )
+    )
+  );
+};
+
 var view = (function (state, actions) {
   return h(
-    "div",
-    null,
+    'div',
+    { 'class': 'container' },
     h(
-      "section",
-      { "class": "todoapp" },
+      'section',
+      { 'class': 'todoapp' },
+      h(Header, null),
       h(
-        "header",
-        { className: "header" },
-        h(
-          "h1",
-          null,
-          "todos"
-        ),
-        h("input", {
-          type: "text",
-          "class": "new-todo",
+        'div',
+        { className: 'row' },
+        h('input', {
+          type: 'text',
+          'class': 'new-todo',
+          onkeyup: function onkeyup(e) {
+            return e.keyCode === 13 && e.target.value !== '' ? actions.add() : null;
+          },
           oninput: actions.input,
           value: state.input,
           placeholder: state.placeholder })
       ),
       h(
-        "section",
-        { className: "main" },
-        h("input", { type: "checkbox", className: "toggle-all" }),
+        'section',
+        { className: 'main' },
+        h('input', { type: 'checkbox', className: 'toggle-all' }),
         h(
-          "label",
-          { htmlFor: "toggle-all" },
-          "Mark all as complete"
+          'label',
+          { htmlFor: 'toggle-all' },
+          'Mark all as complete'
         ),
-        h("ul", { "class": "todo-list" })
+        h(
+          'ul',
+          { 'class': 'todo-list' },
+          state.todos.map(function (todo) {
+            return h(
+              'li',
+              { 'class': 'todo' },
+              h(
+                'div',
+                { className: 'view' },
+                h('input', { type: 'checkbox', 'class': 'toggle' }),
+                h(
+                  'label',
+                  null,
+                  todo.value
+                ),
+                h('button', { 'class': 'destroy' })
+              )
+            );
+          })
+        )
       ),
       h(
-        "footer",
-        { className: "footer" },
-        h("span", { className: "todo-count" }),
+        'footer',
+        { className: 'footer' },
+        h('span', { className: 'todo-count' }),
         h(
-          "ul",
-          { className: "filters" },
+          'ul',
+          { className: 'filters' },
           h(
-            "li",
+            'li',
             null,
             h(
-              "a",
-              { href: "#/", "class": "selected" },
-              "All"
+              'a',
+              { href: '#/', 'class': 'selected' },
+              'All'
             )
           ),
           h(
-            "li",
+            'li',
             null,
             h(
-              "a",
-              { href: "#/active" },
-              "Active"
+              'a',
+              { href: '#/active' },
+              'Active'
             )
           ),
           h(
-            "li",
+            'li',
             null,
             h(
-              "a",
-              { href: "#/completed" },
-              "Completed"
+              'a',
+              { href: '#/completed' },
+              'Completed'
             )
           )
         ),
         h(
-          "button",
-          { className: "clear-completed" },
-          "Clear completed"
+          'button',
+          { className: 'clear-completed' },
+          'Clear completed'
         )
       )
     ),
-    h(
-      "footer",
-      { className: "info" },
-      h(
-        "p",
-        null,
-        "Double-click to edit a todo"
-      ),
-      h(
-        "p",
-        null,
-        "Written by ",
-        h(
-          "a",
-          { href: "http://dangthanh.org" },
-          "Dang Van Thanh"
-        )
-      ),
-      h(
-        "p",
-        null,
-        "Part of ",
-        h(
-          "a",
-          { href: "http://todomvc.com" },
-          "TodoMVC"
-        )
-      )
-    )
+    h(Footer, null)
   );
 });
 

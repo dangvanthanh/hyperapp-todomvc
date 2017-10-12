@@ -1,7 +1,6 @@
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
-import livereload from 'rollup-plugin-livereload'
-import serve from 'rollup-plugin-serve'
+import uglify from 'rollup-plugin-uglify'
 
 const plugins = [
 	babel({
@@ -14,12 +13,7 @@ const plugins = [
 	resolve({
 		jsnext: true
   }),
-  livereload(),
-  serve({
-		contentBase: './',
-		port: 8080,
-		open: true
-	})
+  uglify()
 ]
 
 let config = {
@@ -28,7 +22,7 @@ let config = {
 		file: './dist/app.js',
 		format: 'umd'
 	},
-	sourcemap: true,
+	sourcemap: false,
 	plugins: plugins
 }
 
