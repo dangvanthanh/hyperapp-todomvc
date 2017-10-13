@@ -276,6 +276,14 @@ function app(props, container) {
   }
 }
 
+var uuid = function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0,
+        v = c == 'x' ? r : r & 0x3 | 0x8;
+    return v.toString(16);
+  });
+};
+
 var actions = {
   input: function input(state, actions, e) {
     return {
@@ -285,7 +293,27 @@ var actions = {
   add: function add(state) {
     return {
       input: '',
-      todos: state.todos.concat({ done: false, value: state.input })
+      todos: state.todos.concat({
+        id: uuid(),
+        done: false,
+        value: state.input
+      })
+    };
+  },
+  remove: function remove(state, actions, e) {
+    return {
+      todos: state.todos.filter(function (t) {
+        return e.target.dataset.uuid !== t.id;
+      })
+    };
+  },
+  toggle: function toggle(state, actions, e) {
+    return {
+      todos: state.todos.map(function (t) {
+        return e.target.dataset.uuid === t.id ? Object.assign({}, t, {
+          done: !t.done
+        }) : t;
+      })
     };
   }
 };
@@ -296,7 +324,7 @@ var state = {
   todos: []
 };
 
-var Header = function Header() {
+var TodoHeader = (function () {
   return h(
     "header",
     { className: "header" },
@@ -306,9 +334,9 @@ var Header = function Header() {
       "todos"
     )
   );
-};
+});
 
-var Footer = function Footer() {
+var TodoFooter = (function () {
   return h(
     "footer",
     { className: "info" },
@@ -338,7 +366,25 @@ var Footer = function Footer() {
       )
     )
   );
-};
+});
+
+var TodoItem = (function (props) {
+  return h(
+    "li",
+    { "class": "todo" },
+    h(
+      "div",
+      { className: "view" },
+      h("input", { type: "checkbox", "class": "toggle", "data-uuid": props.id, onclick: props.toggle }),
+      h(
+        "label",
+        null,
+        props.value
+      ),
+      h("button", { "class": "destroy", "data-uuid": props.id, onclick: props.remove })
+    )
+  );
+});
 
 var view = (function (state, actions) {
   return h(
@@ -347,10 +393,10 @@ var view = (function (state, actions) {
     h(
       'section',
       { 'class': 'todoapp' },
-      h(Header, null),
+      h(TodoHeader, null),
       h(
         'div',
-        { className: 'row' },
+        null,
         h('input', {
           type: 'text',
           'class': 'new-todo',
@@ -359,7 +405,8 @@ var view = (function (state, actions) {
           },
           oninput: actions.input,
           value: state.input,
-          placeholder: state.placeholder })
+          placeholder: state.placeholder,
+          autofocus: true })
       ),
       h(
         'section',
@@ -374,21 +421,7 @@ var view = (function (state, actions) {
           'ul',
           { 'class': 'todo-list' },
           state.todos.map(function (todo) {
-            return h(
-              'li',
-              { 'class': 'todo' },
-              h(
-                'div',
-                { className: 'view' },
-                h('input', { type: 'checkbox', 'class': 'toggle' }),
-                h(
-                  'label',
-                  null,
-                  todo.value
-                ),
-                h('button', { 'class': 'destroy' })
-              )
-            );
+            return h(TodoItem, { id: todo.id, value: todo.value, remove: actions.remove, toggle: actions.toggle });
           })
         )
       ),
@@ -434,7 +467,7 @@ var view = (function (state, actions) {
         )
       )
     ),
-    h(Footer, null)
+    h(TodoFooter, null)
   );
 });
 

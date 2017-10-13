@@ -1,19 +1,21 @@
 import { h } from 'hyperapp'
-import { Header } from '../components/header'
-import { Footer } from '../components/footer'
+import TodoHeader from './todo-header'
+import TodoFooter from './todo-footer'
+import TodoItem from './todo-item'
 
 export default (state, actions) => (
   <div class="container">
     <section class="todoapp">
-      <Header />
-      <div className="row">
+      <TodoHeader />
+      <div>
         <input 
         type="text" 
         class="new-todo"
         onkeyup={e => e.keyCode === 13 && e.target.value !== '' ? actions.add() : null}
         oninput={actions.input}
         value={state.input}
-        placeholder={state.placeholder} />
+        placeholder={state.placeholder} 
+        autofocus/>
       </div>
       <section className="main">
         <input type="checkbox" className="toggle-all"/>
@@ -21,13 +23,7 @@ export default (state, actions) => (
         <ul class="todo-list">
           {
             state.todos.map(todo => (
-              <li class="todo">
-                <div className="view">
-                  <input type="checkbox" class="toggle"/>
-                  <label>{todo.value}</label>
-                  <button class="destroy"></button>
-                </div>
-              </li>
+              <TodoItem id={todo.id} value={todo.value} remove={actions.remove} toggle={actions.toggle} />
             ))
           }
         </ul>
@@ -42,6 +38,6 @@ export default (state, actions) => (
         <button className="clear-completed">Clear completed</button>
       </footer>
     </section>
-    <Footer/>
+    <TodoFooter/>
   </div>
 )
