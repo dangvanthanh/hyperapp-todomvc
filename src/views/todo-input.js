@@ -6,7 +6,7 @@ export default (props) => (
     type="text" 
     class="new-todo"
     onkeyup={e => e.keyCode === 13 && e.target.value !== '' ? props.actions.add() : null}
-    oninput={props.actions.input}
+    oninput={e => props.actions.input({ value: e.target.value })}
     value={props.state.input}
     placeholder={props.state.placeholder} 
     autofocus/>

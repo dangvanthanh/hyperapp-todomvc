@@ -285,9 +285,10 @@ var uuid = function uuid() {
 };
 
 var actions = {
-  input: function input(state, actions, e) {
+  input: function input(state, actions, _ref) {
+    var value = _ref.value;
     return {
-      input: e.target.value
+      input: value
     };
   },
   add: function add(state) {
@@ -300,19 +301,26 @@ var actions = {
       })
     };
   },
-  remove: function remove(state, actions, e) {
+  remove: function remove(state, actions, _ref2) {
+    var uuid$$1 = _ref2.uuid;
     return {
       todos: state.todos.filter(function (t) {
-        return e.target.dataset.uuid !== t.id;
+        return uuid$$1 !== t.id;
       })
     };
   },
-  toggle: function toggle(state, actions, e) {
+  toggle: function toggle(state, actions, _ref3) {
+    var uuid$$1 = _ref3.uuid;
     return {
       todos: state.todos.map(function (t) {
-        return e.target.dataset.uuid === t.id ? Object.assign({}, t, {
-          done: !t.done
-        }) : t;
+        return uuid$$1 === t.id ? Object.assign({}, t, { done: !t.done }) : t;
+      })
+    };
+  },
+  clearCompleted: function clearCompleted(state) {
+    return {
+      todos: state.todos.filter(function (t) {
+        return !t.done;
       })
     };
   }
@@ -378,7 +386,9 @@ var TodoInput = (function (props) {
       onkeyup: function onkeyup(e) {
         return e.keyCode === 13 && e.target.value !== '' ? props.actions.add() : null;
       },
-      oninput: props.actions.input,
+      oninput: function oninput(e) {
+        return props.actions.input({ value: e.target.value });
+      },
       value: props.state.input,
       placeholder: props.state.placeholder,
       autofocus: true })
@@ -387,18 +397,22 @@ var TodoInput = (function (props) {
 
 var TodoItem = (function (props) {
   return h(
-    "li",
-    { "class": "todo" },
+    'li',
+    { 'class': props.todo.done ? 'todo completed' : 'todo' },
     h(
-      "div",
-      { className: "view" },
-      h("input", { type: "checkbox", "class": "toggle", "data-uuid": props.todo.id, onclick: props.actions.toggle }),
+      'div',
+      { className: 'view' },
+      h('input', { type: 'checkbox', 'class': 'toggle', onclick: function onclick(e) {
+          return props.actions.toggle({ uuid: props.todo.id });
+        } }),
       h(
-        "label",
+        'label',
         null,
         props.todo.value
       ),
-      h("button", { "class": "destroy", "data-uuid": props.todo.id, onclick: props.actions.remove })
+      h('button', { 'class': 'destroy', onclick: function onclick(e) {
+          return props.actions.remove({ uuid: props.todo.id });
+        } })
     )
   );
 });
@@ -475,7 +489,7 @@ var view = (function (state, actions) {
         ),
         h(
           'button',
-          { className: 'clear-completed' },
+          { className: 'clear-completed', onclick: actions.clearCompleted },
           'Clear completed'
         )
       )

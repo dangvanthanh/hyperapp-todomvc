@@ -21,7 +21,7 @@ export default (state, actions) => (
           <li><a href="#/active">Active</a></li>
           <li><a href="#/completed">Completed</a></li>
         </ul>
-        <button className="clear-completed">Clear completed</button>
+        <button className="clear-completed" onclick={actions.clearCompleted}>Clear completed</button>
       </footer>
     </section>
     <TodoFooter/>

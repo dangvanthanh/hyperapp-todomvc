@@ -1,8 +1,8 @@
 import { uuid } from '../utils'
 
 export default {
-  input: (state, actions, e) => ({
-    input: e.target.value
+  input: (state, actions, { value }) => ({
+    input: value
   }),
   add: (state) => ({
     input: '',
@@ -12,12 +12,13 @@ export default {
       value: state.input 
     })
   }),
-  remove: (state, actions, e) => ({
-    todos: state.todos.filter(t => e.target.dataset.uuid !== t.id)
+  remove: (state, actions, { uuid }) => ({
+    todos: state.todos.filter(t => uuid !== t.id)
   }),
-  toggle: (state, actions, e) => ({
-    todos: state.todos.map(t => e.target.dataset.uuid === t.id ? Object.assign({}, t, {
-      done: !t.done
-    }) : t)
+  toggle: (state, actions, { uuid }) => ({
+    todos: state.todos.map(t => uuid === t.id ? Object.assign({}, t, { done: !t.done }) : t)
+  }),
+  clearCompleted: (state) => ({
+    todos: state.todos.filter(t => !t.done)
   })
 }
