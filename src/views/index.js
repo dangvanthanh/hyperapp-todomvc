@@ -1,35 +1,21 @@
 import { h } from 'hyperapp'
 import TodoHeader from './todo-header'
 import TodoFooter from './todo-footer'
-import TodoItem from './todo-item'
+import TodoInput from './todo-input'
+import TodoList from './todo-list'
 
 export default (state, actions) => (
   <div class="container">
     <section class="todoapp">
       <TodoHeader />
-      <div>
-        <input 
-        type="text" 
-        class="new-todo"
-        onkeyup={e => e.keyCode === 13 && e.target.value !== '' ? actions.add() : null}
-        oninput={actions.input}
-        value={state.input}
-        placeholder={state.placeholder} 
-        autofocus/>
-      </div>
+      <TodoInput state={state} actions={actions} />
       <section className="main">
         <input type="checkbox" className="toggle-all"/>
         <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul class="todo-list">
-          {
-            state.todos.map(todo => (
-              <TodoItem id={todo.id} value={todo.value} remove={actions.remove} toggle={actions.toggle} />
-            ))
-          }
-        </ul>
+        <TodoList todos={state.todos} actions={actions} />
       </section>
       <footer className="footer">
-        <span className="todo-count"></span>
+        <span className="todo-count">{state.todos.length} item left</span>
         <ul className="filters">
           <li><a href="#/" class="selected">All</a></li>
           <li><a href="#/active">Active</a></li>

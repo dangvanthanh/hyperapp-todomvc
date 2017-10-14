@@ -368,6 +368,23 @@ var TodoFooter = (function () {
   );
 });
 
+var TodoInput = (function (props) {
+  return h(
+    "div",
+    null,
+    h("input", {
+      type: "text",
+      "class": "new-todo",
+      onkeyup: function onkeyup(e) {
+        return e.keyCode === 13 && e.target.value !== '' ? props.actions.add() : null;
+      },
+      oninput: props.actions.input,
+      value: props.state.input,
+      placeholder: props.state.placeholder,
+      autofocus: true })
+  );
+});
+
 var TodoItem = (function (props) {
   return h(
     "li",
@@ -375,14 +392,24 @@ var TodoItem = (function (props) {
     h(
       "div",
       { className: "view" },
-      h("input", { type: "checkbox", "class": "toggle", "data-uuid": props.id, onclick: props.toggle }),
+      h("input", { type: "checkbox", "class": "toggle", "data-uuid": props.todo.id, onclick: props.actions.toggle }),
       h(
         "label",
         null,
-        props.value
+        props.todo.value
       ),
-      h("button", { "class": "destroy", "data-uuid": props.id, onclick: props.remove })
+      h("button", { "class": "destroy", "data-uuid": props.todo.id, onclick: props.actions.remove })
     )
+  );
+});
+
+var TodoList = (function (props) {
+  return h(
+    'ul',
+    { 'class': 'todo-list' },
+    props.todos.map(function (todo) {
+      return h(TodoItem, { todo: todo, actions: props.actions });
+    })
   );
 });
 
@@ -394,20 +421,7 @@ var view = (function (state, actions) {
       'section',
       { 'class': 'todoapp' },
       h(TodoHeader, null),
-      h(
-        'div',
-        null,
-        h('input', {
-          type: 'text',
-          'class': 'new-todo',
-          onkeyup: function onkeyup(e) {
-            return e.keyCode === 13 && e.target.value !== '' ? actions.add() : null;
-          },
-          oninput: actions.input,
-          value: state.input,
-          placeholder: state.placeholder,
-          autofocus: true })
-      ),
+      h(TodoInput, { state: state, actions: actions }),
       h(
         'section',
         { className: 'main' },
@@ -417,18 +431,17 @@ var view = (function (state, actions) {
           { htmlFor: 'toggle-all' },
           'Mark all as complete'
         ),
-        h(
-          'ul',
-          { 'class': 'todo-list' },
-          state.todos.map(function (todo) {
-            return h(TodoItem, { id: todo.id, value: todo.value, remove: actions.remove, toggle: actions.toggle });
-          })
-        )
+        h(TodoList, { todos: state.todos, actions: actions })
       ),
       h(
         'footer',
         { className: 'footer' },
-        h('span', { className: 'todo-count' }),
+        h(
+          'span',
+          { className: 'todo-count' },
+          state.todos.length,
+          ' item left'
+        ),
         h(
           'ul',
           { className: 'filters' },
