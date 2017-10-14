@@ -402,7 +402,11 @@ var TodoItem = (function (props) {
     h(
       'div',
       { className: 'view' },
-      h('input', { type: 'checkbox', 'class': 'toggle', onclick: function onclick(e) {
+      h('input', {
+        type: 'checkbox',
+        'class': 'toggle',
+        checked: props.todo.done ? true : false,
+        onclick: function onclick(e) {
           return props.actions.toggle({ uuid: props.todo.id });
         } }),
       h(
