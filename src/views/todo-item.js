@@ -8,7 +8,13 @@ export default (props) => (
         class="toggle" 
         checked={props.todo.done ? true : false} 
         onclick={e => props.actions.toggle({ uuid: props.todo.id })}/>
-      <label>{props.todo.value}</label>
+      <label 
+        contenteditable="true"
+        onkeyup={e => e.keyCode === 13 ? props.actions.editEnter({ uuid: props.todo.id, value: e.target.textContent }) : null}
+        oninput={e => (props.todo.value = e.target.textContent || '')}
+        onblur={props.actions.edit}>
+        {props.todo.value}
+      </label>
       <button class="destroy" onclick={e => props.actions.remove({ uuid: props.todo.id })}></button>
     </div>
   </li>

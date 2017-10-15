@@ -3,27 +3,21 @@ import TodoHeader from './todo-header'
 import TodoFooter from './todo-footer'
 import TodoInput from './todo-input'
 import TodoList from './todo-list'
+import TodoFilter from './todo-filter'
 
 export default (state, actions) => (
   <div class="container">
     <section class="todoapp">
-      <TodoHeader />
+      <TodoHeader/>
       <TodoInput state={state} actions={actions} />
       <section className="main">
-        <input type="checkbox" className="toggle-all"/>
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <TodoList todos={state.todos} actions={actions} />
+        <input type="checkbox" className="toggle-all" id="toggle-all"/>
+        <label htmlFor="toggle-all" onclick={actions.toggleAll}>Mark all as complete</label>
+        <TodoList todos={state.todos} actions={actions} filter={state.filter} />
       </section>
-      <footer className="footer">
-        <span className="todo-count">{state.todos.length} item left</span>
-        <ul className="filters">
-          <li><a href="#/" class="selected">All</a></li>
-          <li><a href="#/active">Active</a></li>
-          <li><a href="#/completed">Completed</a></li>
-        </ul>
-        <button className="clear-completed" onclick={actions.clearCompleted}>Clear completed</button>
-      </footer>
+      <TodoFilter state={state} actions={actions} />
     </section>
     <TodoFooter/>
+    {JSON.stringify(state.todos)}
   </div>
 )

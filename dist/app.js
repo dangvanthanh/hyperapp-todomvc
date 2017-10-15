@@ -276,6 +276,8 @@ function app(props, container) {
   }
 }
 
+var FILTERINFO = { All: 0, Active: 1, Completed: 2 };
+
 var uuid = function uuid() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0,
@@ -301,21 +303,45 @@ var actions = {
       })
     };
   },
-  remove: function remove(state, actions, _ref2) {
-    var uuid$$1 = _ref2.uuid;
+  editEnter: function editEnter(state, actions, _ref2) {
+    var uuid$$1 = _ref2.uuid,
+        value = _ref2.value;
+    return {
+      todos: state.todos.map(function (t) {
+        return uuid$$1 === t.id ? Object.assign({}, t, { value: value }) : t;
+      })
+    };
+  },
+  edit: function edit(state, actions, e) {
+    e.target.blur();
+  },
+  remove: function remove(state, actions, _ref3) {
+    var uuid$$1 = _ref3.uuid;
     return {
       todos: state.todos.filter(function (t) {
         return uuid$$1 !== t.id;
       })
     };
   },
-  toggle: function toggle(state, actions, _ref3) {
-    var uuid$$1 = _ref3.uuid;
+  toggle: function toggle(state, actions, _ref4) {
+    var uuid$$1 = _ref4.uuid;
     return {
       todos: state.todos.map(function (t) {
         return uuid$$1 === t.id ? Object.assign({}, t, { done: !t.done }) : t;
       })
     };
+  },
+  toggleAll: function toggleAll(state) {
+    return {
+      todos: state.todos.map(function (t) {
+        t.done = !t.done;
+        return t;
+      })
+    };
+  },
+  filter: function filter(state, actions, _ref5) {
+    var value = _ref5.value;
+    return { filter: value };
   },
   clearCompleted: function clearCompleted(state) {
     return {
@@ -329,7 +355,8 @@ var actions = {
 var state = {
   input: '',
   placeholder: 'What needs to be done?',
-  todos: []
+  todos: [],
+  filter: FILTERINFO.All
 };
 
 var TodoHeader = (function () {
@@ -411,7 +438,15 @@ var TodoItem = (function (props) {
         } }),
       h(
         'label',
-        null,
+        {
+          contenteditable: 'true',
+          onkeyup: function onkeyup(e) {
+            return e.keyCode === 13 ? props.actions.editEnter({ uuid: props.todo.id, value: e.target.textContent }) : null;
+          },
+          oninput: function oninput(e) {
+            return props.todo.value = e.target.textContent || '';
+          },
+          onblur: props.actions.edit },
         props.todo.value
       ),
       h('button', { 'class': 'destroy', onclick: function onclick(e) {
@@ -425,9 +460,51 @@ var TodoList = (function (props) {
   return h(
     'ul',
     { 'class': 'todo-list' },
-    props.todos.map(function (todo) {
+    props.todos.filter(function (t) {
+      return props.filter === FILTERINFO.Completed ? t.done : props.filter === FILTERINFO.Active ? !t.done : props.filter === FILTERINFO.All;
+    }).map(function (todo) {
       return h(TodoItem, { todo: todo, actions: props.actions });
     })
+  );
+});
+
+var TodoFilter = (function (props) {
+  return h(
+    'footer',
+    { className: 'footer' },
+    h(
+      'span',
+      { className: 'todo-count' },
+      props.state.todos.filter(function (t) {
+        return !t.done;
+      }).length,
+      ' item left'
+    ),
+    h(
+      'ul',
+      { className: 'filters' },
+      Object.keys(FILTERINFO).map(function (key) {
+        return h(
+          'li',
+          null,
+          h(
+            'a',
+            {
+              href: '#',
+              'class': props.state.filter === FILTERINFO[key] ? 'selected' : '',
+              onclick: function onclick() {
+                return props.actions.filter({ value: FILTERINFO[key] });
+              } },
+            key
+          )
+        );
+      })
+    ),
+    h(
+      'button',
+      { className: 'clear-completed', onclick: props.actions.clearCompleted },
+      'Clear completed'
+    )
   );
 });
 
@@ -443,62 +520,18 @@ var view = (function (state, actions) {
       h(
         'section',
         { className: 'main' },
-        h('input', { type: 'checkbox', className: 'toggle-all' }),
+        h('input', { type: 'checkbox', className: 'toggle-all', id: 'toggle-all' }),
         h(
           'label',
-          { htmlFor: 'toggle-all' },
+          { htmlFor: 'toggle-all', onclick: actions.toggleAll },
           'Mark all as complete'
         ),
-        h(TodoList, { todos: state.todos, actions: actions })
+        h(TodoList, { todos: state.todos, actions: actions, filter: state.filter })
       ),
-      h(
-        'footer',
-        { className: 'footer' },
-        h(
-          'span',
-          { className: 'todo-count' },
-          state.todos.length,
-          ' item left'
-        ),
-        h(
-          'ul',
-          { className: 'filters' },
-          h(
-            'li',
-            null,
-            h(
-              'a',
-              { href: '#/', 'class': 'selected' },
-              'All'
-            )
-          ),
-          h(
-            'li',
-            null,
-            h(
-              'a',
-              { href: '#/active' },
-              'Active'
-            )
-          ),
-          h(
-            'li',
-            null,
-            h(
-              'a',
-              { href: '#/completed' },
-              'Completed'
-            )
-          )
-        ),
-        h(
-          'button',
-          { className: 'clear-completed', onclick: actions.clearCompleted },
-          'Clear completed'
-        )
-      )
+      h(TodoFilter, { state: state, actions: actions })
     ),
-    h(TodoFooter, null)
+    h(TodoFooter, null),
+    JSON.stringify(state.todos)
   );
 });
 
