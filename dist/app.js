@@ -1,1 +1,701 @@
-!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e():"function"==typeof define&&define.amd?define(e):e()}(0,function(){"use strict";function t(t,e){var r,i=[];for(n=arguments.length;n-- >2;)o.push(arguments[n]);for(;o.length;)if(Array.isArray(r=o.pop()))for(n=r.length;n--;)o.push(r[n]);else null!=r&&!0!==r&&!1!==r&&i.push("number"==typeof r?r+="":r);return"string"==typeof t?{type:t,props:e||{},children:i}:t(e||{},i)}function e(t,n){var o,r="",i=void 0===t?"undefined":f(t);if(t&&"string"===i||"number"===i)return t;if(n=n||" ",Array.isArray(t)&&t.length)for(var u=0,l=t.length;u<l;u++)(o=e(t[u],n))&&(r+=(r&&n)+o);else for(var u in t)t.hasOwnProperty(u)&&(o=t[u])&&(r+=(r&&n)+u+("object"===(void 0===o?"undefined":f(o))?e(o,n+u):""));return r}var n,o=[],r={All:0,Active:1,Completed:2},i=function(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(t){var e=16*Math.random()|0;return("x"==t?e:3&e|8).toString(16)})},u={input:function(t,e,n){return{input:n.value}},add:function(t){return{input:"",todos:t.todos.concat({id:i(),done:!1,editing:!1,value:t.input})}},editUpdate:function(t,e,n){var o=n.uuid,r=n.value;return{todos:t.todos.map(function(t){return o===t.id?Object.assign({},t,{editing:!1,value:r}):t})}},editEnter:function(t,e,n){var o=n.uuid;return{todos:t.todos.map(function(t){return o===t.id?Object.assign({},t,{editing:!0}):t})}},remove:function(t,e,n){var o=n.uuid;return{todos:t.todos.filter(function(t){return o!==t.id})}},toggle:function(t,e,n){var o=n.uuid;return{todos:t.todos.map(function(t){return o===t.id?Object.assign({},t,{done:!t.done}):t})}},toggleAll:function(t){return{todos:t.todos.map(function(t){return t.done=!t.done,t})}},filter:function(t,e,n){return{filter:n.value}},clearCompleted:function(t){return{todos:t.todos.filter(function(t){return!t.done})}}},l={input:"",placeholder:"What needs to be done?",todos:[],filter:r.All},c=function(){return t("header",{className:"header"},t("h1",null,"todos"))},a=function(){return t("footer",{className:"info"},t("p",null,"Double-click to edit a todo"),t("p",null,"Written by ",t("a",{href:"http://dangthanh.org"},"Dang Van Thanh")),t("p",null,"Part of ",t("a",{href:"http://todomvc.com"},"TodoMVC")))},s=function(e){return t("div",null,t("input",{type:"text",class:"new-todo",onkeyup:function(t){return 13===t.keyCode&&""!==t.target.value?e.actions.add():null},oninput:function(t){return e.actions.input({value:t.target.value})},value:e.state.input,placeholder:e.state.placeholder,autofocus:!0}))},f="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},d=(function(){function t(t){this.value=t}function e(e){function n(r,i){try{var u=e[r](i),l=u.value;l instanceof t?Promise.resolve(l.value).then(function(t){n("next",t)},function(t){n("throw",t)}):o(u.done?"return":"normal",u.value)}catch(t){o("throw",t)}}function o(t,e){switch(t){case"return":r.resolve({value:e,done:!0});break;case"throw":r.reject(e);break;default:r.resolve({value:e,done:!1})}(r=r.next)?n(r.key,r.arg):i=null}var r,i;this._invoke=function(t,e){return new Promise(function(o,u){var l={key:t,arg:e,resolve:o,reject:u,next:null};i?i=i.next=l:(r=i=l,n(t,e))})},"function"!=typeof e.return&&(this.return=void 0)}"function"==typeof Symbol&&Symbol.asyncIterator&&(e.prototype[Symbol.asyncIterator]=function(){return this}),e.prototype.next=function(t){return this._invoke("next",t)},e.prototype.throw=function(t){return this._invoke("throw",t)},e.prototype.return=function(t){return this._invoke("return",t)}}(),function(n){return t("li",{class:e(["todo",{completed:n.todo.done,editing:n.todo.editing}])},t("div",{className:"view"},t("input",{type:"checkbox",class:"toggle",checked:!!n.todo.done,onclick:function(t){return n.actions.toggle({uuid:n.todo.id})}}),t("label",{ondblclick:function(t){return n.actions.editEnter({uuid:n.todo.id})}},n.todo.value),t("button",{class:"destroy",onclick:function(t){return n.actions.remove({uuid:n.todo.id})}})),t("input",{type:"text",class:"edit",onkeyup:function(t){return 13===t.keyCode?n.actions.editUpdate({uuid:n.todo.id,value:t.target.value}):null},onblur:function(t){return n.actions.editUpdate({uuid:n.todo.id,value:t.target.value})},value:n.todo.value}))}),p=function(e){return t("ul",{class:"todo-list"},e.todos.filter(function(t){return e.filter===r.Completed?t.done:e.filter===r.Active?!t.done:e.filter===r.All}).map(function(n){return t(d,{todo:n,actions:e.actions})}))},v=function(e){return t("footer",{className:"footer"},t("span",{className:"todo-count"},e.state.todos.filter(function(t){return!t.done}).length," item left"),t("ul",{className:"filters"},Object.keys(r).map(function(n){return t("li",null,t("a",{href:"#",class:e.state.filter===r[n]?"selected":"",onclick:function(){return e.actions.filter({value:r[n]})}},n))})),t("button",{className:"clear-completed",onclick:e.actions.clearCompleted},"Clear completed"))};!function(e,n){function o(){e.view&&!m&&requestAnimationFrame(r,m=!m)}function r(){i(b=h(n,b,k,k=e.view(g,x),m=!m))}function i(t){for(;t=w.pop();)t()}function u(e,n){return e&&t(e.tagName.toLowerCase(),{},n.call(e.childNodes,function(t){return 3===t.nodeType?t.nodeValue:u(t,n)}))}function l(t,e,n){t.init&&w.push(function(){t.init(e,n)}),a(e,t.state),c(e,n,t.actions);for(var o in t.modules)l(t.modules[o],e[o]={},n[o]={})}function c(t,e,n){function r(e){return"function"==typeof e?r(e(t)):e&&o(a(t,e)),t}Object.keys(n||{}).map(function(o){"function"==typeof n[o]?e[o]=function(i){return"function"==typeof(i=n[o](t,e,i))?i(r):r(i)}:c(t[o]||(t[o]={}),e[o]={},n[o])})}function a(t,e){for(var n in e)t[n]=e[n];return t}function s(t,e){return a(a({},t),e)}function f(t,e){if("string"==typeof t)n=document.createTextNode(t);else{var n=(e=e||"svg"===t.type)?document.createElementNS("http://www.w3.org/2000/svg",t.type):document.createElement(t.type);for(t.props&&t.props.oncreate&&w.push(function(){t.props.oncreate(n)}),o=0;o<t.children.length;o++)n.appendChild(f(t.children[o],e));for(var o in t.props)d(n,o,t.props[o])}return n}function d(t,e,n,o){if("key"===e);else if("style"===e)for(var e in s(o,n=n||{}))t.style[e]=n[e]||"";else{try{t[e]=n}catch(t){}"function"!=typeof n&&(n?t.setAttribute(e,n):t.removeAttribute(e))}}function p(t,e,n){for(var o in s(e,n)){var r=n[o],i="value"===o||"checked"===o?t[o]:e[o];r!==i&&r!==i&&d(t,o,r,i)}n&&n.onupdate&&w.push(function(){n.onupdate(t,e)})}function v(t,e,n){function o(){t.removeChild(e)}n&&n.onremove&&"function"==typeof(n=n.onremove(e))?n(o):o()}function y(t){if(t&&t.props)return t.props.key}function h(t,e,n,o,r,i){if(null==n)e=t.insertBefore(f(o,r),e);else if(null!=o.type&&o.type===n.type){p(e,n.props,o.props),r=r||"svg"===o.type;for(var u=o.children.length,l=n.children.length,c={},a=[],s={},d=0;d<l;d++)g=a[d]=e.childNodes[d],null!=(A=y(x=n.children[d]))&&(c[A]=[g,x]);for(var d=0,m=0;m<u;){var g=a[d],x=n.children[d],b=o.children[m];if(s[A=y(x)])d++;else{var k=y(b),w=c[k]||[];null==k?(null==A&&(h(e,g,x,b,r),m++),d++):(A===k?(h(e,w[0],w[1],b,r),d++):w[0]?(e.insertBefore(w[0],g),h(e,w[0],w[1],b,r)):h(e,g,null,b,r),m++,s[k]=b)}}for(;d<l;){var A=y(x=n.children[d]);null==A&&v(e,a[d],x.props),d++}for(var d in c){var N=(w=c[d])[1];s[N.props.key]||v(e,w[0],N.props)}}else e&&o!==e.nodeValue&&("string"==typeof o&&"string"==typeof n?e.nodeValue=o:(e=t.insertBefore(f(o,r),i=e),v(t,i,n.props)));return e}var m,g,x,b=(n=n||document.body).children[0],k=u(b,[].map),w=[];o(i(l(e,g={},x={})))}({state:l,actions:u,view:function(e,n){return t("div",{class:"container"},t("section",{class:"todoapp"},t(c,null),t(s,{state:e,actions:n}),t("section",{className:"main"},t("input",{type:"checkbox",className:"toggle-all",id:"toggle-all"}),t("label",{htmlFor:"toggle-all",onclick:n.toggleAll},"Mark all as complete"),t(p,{todos:e.todos,actions:n,filter:e.filter})),t(v,{state:e,actions:n})),t(a,null))}},document.getElementById("app"))});
+(function(l, i, v, e) { v = l.createElement(i); v.async = 1; v.src = '//' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; e = l.getElementsByTagName(i)[0]; e.parentNode.insertBefore(v, e)})(document, 'script');
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(factory());
+}(this, (function () { 'use strict';
+
+var i;
+var stack = [];
+
+function h(type, props) {
+  var node;
+  var children = [];
+
+  for (i = arguments.length; i-- > 2;) {
+    stack.push(arguments[i]);
+  }
+
+  while (stack.length) {
+    if (Array.isArray(node = stack.pop())) {
+      for (i = node.length; i--;) {
+        stack.push(node[i]);
+      }
+    } else if (node != null && node !== true && node !== false) {
+      children.push(typeof node === "number" ? node = node + "" : node);
+    }
+  }
+
+  return typeof type === "string" ? { type: type, props: props || {}, children: children } : type(props || {}, children);
+}
+
+function app(props, container) {
+  var root = (container = container || document.body).children[0];
+  var node = toVNode(root, [].map);
+  var callbacks = [];
+  var skipRender;
+  var globalState;
+  var globalActions;
+
+  repaint(flush(init(props, globalState = {}, globalActions = {})));
+
+  return globalActions;
+
+  function repaint() {
+    if (props.view && !skipRender) {
+      requestAnimationFrame(render, skipRender = !skipRender);
+    }
+  }
+
+  function render() {
+    flush(root = patchElement(container, root, node, node = props.view(globalState, globalActions), skipRender = !skipRender));
+  }
+
+  function flush(cb) {
+    while (cb = callbacks.pop()) {
+      cb();
+    }
+  }
+
+  function toVNode(element, map) {
+    return element && h(element.tagName.toLowerCase(), {}, map.call(element.childNodes, function (element) {
+      return element.nodeType === 3 ? element.nodeValue : toVNode(element, map);
+    }));
+  }
+
+  function init(module, state, actions) {
+    if (module.init) {
+      callbacks.push(function () {
+        module.init(state, actions);
+      });
+    }
+
+    assign(state, module.state);
+
+    initActions(state, actions, module.actions);
+
+    for (var i in module.modules) {
+      init(module.modules[i], state[i] = {}, actions[i] = {});
+    }
+  }
+
+  function initActions(state, actions, source) {
+    Object.keys(source || {}).map(function (i) {
+      if (typeof source[i] === "function") {
+        actions[i] = function (data) {
+          return typeof (data = source[i](state, actions, data)) === "function" ? data(update) : update(data);
+        };
+      } else {
+        initActions(state[i] || (state[i] = {}), actions[i] = {}, source[i]);
+      }
+    });
+
+    function update(data) {
+      return typeof data === "function" ? update(data(state)) : data && repaint(assign(state, data)), state;
+    }
+  }
+
+  function assign(target, source) {
+    for (var i in source) {
+      target[i] = source[i];
+    }
+    return target;
+  }
+
+  function merge(target, source) {
+    return assign(assign({}, target), source);
+  }
+
+  function createElement(node, isSVG) {
+    if (typeof node === "string") {
+      var element = document.createTextNode(node);
+    } else {
+      var element = (isSVG = isSVG || node.type === "svg") ? document.createElementNS("http://www.w3.org/2000/svg", node.type) : document.createElement(node.type);
+
+      if (node.props && node.props.oncreate) {
+        callbacks.push(function () {
+          node.props.oncreate(element);
+        });
+      }
+
+      for (var i = 0; i < node.children.length; i++) {
+        element.appendChild(createElement(node.children[i], isSVG));
+      }
+
+      for (var i in node.props) {
+        setElementProp(element, i, node.props[i]);
+      }
+    }
+    return element;
+  }
+
+  function setElementProp(element, name, value, oldValue) {
+    if (name === "key") {} else if (name === "style") {
+      for (var name in merge(oldValue, value = value || {})) {
+        element.style[name] = value[name] || "";
+      }
+    } else {
+      try {
+        element[name] = value;
+      } catch (_) {}
+
+      if (typeof value !== "function") {
+        if (value) {
+          element.setAttribute(name, value);
+        } else {
+          element.removeAttribute(name);
+        }
+      }
+    }
+  }
+
+  function updateElement(element, oldProps, props) {
+    for (var i in merge(oldProps, props)) {
+      var value = props[i];
+      var oldValue = i === "value" || i === "checked" ? element[i] : oldProps[i];
+
+      if (value !== oldValue) {
+        value !== oldValue && setElementProp(element, i, value, oldValue);
+      }
+    }
+
+    if (props && props.onupdate) {
+      callbacks.push(function () {
+        props.onupdate(element, oldProps);
+      });
+    }
+  }
+
+  function removeElement(parent, element, props) {
+    if (props && props.onremove && typeof (props = props.onremove(element)) === "function") {
+      props(remove);
+    } else {
+      remove();
+    }
+
+    function remove() {
+      parent.removeChild(element);
+    }
+  }
+
+  function getKey(node) {
+    if (node && node.props) {
+      return node.props.key;
+    }
+  }
+
+  function patchElement(parent, element, oldNode, node, isSVG, nextSibling) {
+    if (oldNode == null) {
+      element = parent.insertBefore(createElement(node, isSVG), element);
+    } else if (node.type != null && node.type === oldNode.type) {
+      updateElement(element, oldNode.props, node.props);
+
+      isSVG = isSVG || node.type === "svg";
+
+      var len = node.children.length;
+      var oldLen = oldNode.children.length;
+      var oldKeyed = {};
+      var oldElements = [];
+      var keyed = {};
+
+      for (var i = 0; i < oldLen; i++) {
+        var oldElement = oldElements[i] = element.childNodes[i];
+        var oldChild = oldNode.children[i];
+        var oldKey = getKey(oldChild);
+
+        if (null != oldKey) {
+          oldKeyed[oldKey] = [oldElement, oldChild];
+        }
+      }
+
+      var i = 0;
+      var j = 0;
+
+      while (j < len) {
+        var oldElement = oldElements[i];
+        var oldChild = oldNode.children[i];
+        var newChild = node.children[j];
+
+        var oldKey = getKey(oldChild);
+        if (keyed[oldKey]) {
+          i++;
+          continue;
+        }
+
+        var newKey = getKey(newChild);
+
+        var keyedNode = oldKeyed[newKey] || [];
+
+        if (null == newKey) {
+          if (null == oldKey) {
+            patchElement(element, oldElement, oldChild, newChild, isSVG);
+            j++;
+          }
+          i++;
+        } else {
+          if (oldKey === newKey) {
+            patchElement(element, keyedNode[0], keyedNode[1], newChild, isSVG);
+            i++;
+          } else if (keyedNode[0]) {
+            element.insertBefore(keyedNode[0], oldElement);
+            patchElement(element, keyedNode[0], keyedNode[1], newChild, isSVG);
+          } else {
+            patchElement(element, oldElement, null, newChild, isSVG);
+          }
+
+          j++;
+          keyed[newKey] = newChild;
+        }
+      }
+
+      while (i < oldLen) {
+        var oldChild = oldNode.children[i];
+        var oldKey = getKey(oldChild);
+        if (null == oldKey) {
+          removeElement(element, oldElements[i], oldChild.props);
+        }
+        i++;
+      }
+
+      for (var i in oldKeyed) {
+        var keyedNode = oldKeyed[i];
+        var reusableNode = keyedNode[1];
+        if (!keyed[reusableNode.props.key]) {
+          removeElement(element, keyedNode[0], reusableNode.props);
+        }
+      }
+    } else if (element && node !== element.nodeValue) {
+      if (typeof node === "string" && typeof oldNode === "string") {
+        element.nodeValue = node;
+      } else {
+        element = parent.insertBefore(createElement(node, isSVG), nextSibling = element);
+        removeElement(parent, nextSibling, oldNode.props);
+      }
+    }
+    return element;
+  }
+}
+
+var FILTERINFO = { All: 0, Active: 1, Completed: 2 };
+
+var uuid = function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0,
+        v = c == 'x' ? r : r & 0x3 | 0x8;
+    return v.toString(16);
+  });
+};
+
+var actions = {
+  input: function input(state, actions, _ref) {
+    var value = _ref.value;
+    return {
+      input: value
+    };
+  },
+  add: function add(state) {
+    return {
+      input: '',
+      todos: state.todos.concat({
+        id: uuid(),
+        done: false,
+        editing: false,
+        value: state.input
+      })
+    };
+  },
+  editUpdate: function editUpdate(state, actions, _ref2) {
+    var uuid$$1 = _ref2.uuid,
+        value = _ref2.value;
+    return {
+      todos: state.todos.map(function (t) {
+        return uuid$$1 === t.id ? Object.assign({}, t, { editing: false, value: value }) : t;
+      })
+    };
+  },
+  editEnter: function editEnter(state, actions, _ref3) {
+    var uuid$$1 = _ref3.uuid;
+    return {
+      todos: state.todos.map(function (t) {
+        return uuid$$1 === t.id ? Object.assign({}, t, { editing: true }) : t;
+      })
+    };
+  },
+  remove: function remove(state, actions, _ref4) {
+    var uuid$$1 = _ref4.uuid;
+    return {
+      todos: state.todos.filter(function (t) {
+        return uuid$$1 !== t.id;
+      })
+    };
+  },
+  toggle: function toggle(state, actions, _ref5) {
+    var uuid$$1 = _ref5.uuid;
+    return {
+      todos: state.todos.map(function (t) {
+        return uuid$$1 === t.id ? Object.assign({}, t, { done: !t.done }) : t;
+      })
+    };
+  },
+  toggleAll: function toggleAll(state) {
+    return {
+      todos: state.todos.map(function (t) {
+        t.done = !t.done;
+        return t;
+      })
+    };
+  },
+  filter: function filter(state, actions, _ref6) {
+    var value = _ref6.value;
+    return { filter: value };
+  },
+  clearCompleted: function clearCompleted(state) {
+    return {
+      todos: state.todos.filter(function (t) {
+        return !t.done;
+      })
+    };
+  }
+};
+
+var state = {
+  input: '',
+  placeholder: 'What needs to be done?',
+  todos: [],
+  filter: FILTERINFO.All
+};
+
+var TodoHeader = (function () {
+  return h(
+    "header",
+    { className: "header" },
+    h(
+      "h1",
+      null,
+      "todos"
+    )
+  );
+});
+
+var TodoFooter = (function () {
+  return h(
+    "footer",
+    { className: "info" },
+    h(
+      "p",
+      null,
+      "Double-click to edit a todo"
+    ),
+    h(
+      "p",
+      null,
+      "Written by ",
+      h(
+        "a",
+        { href: "http://dangthanh.org" },
+        "Dang Van Thanh"
+      )
+    ),
+    h(
+      "p",
+      null,
+      "Part of ",
+      h(
+        "a",
+        { href: "http://todomvc.com" },
+        "TodoMVC"
+      )
+    )
+  );
+});
+
+var TodoInput = (function (props) {
+  return h(
+    "div",
+    null,
+    h("input", {
+      type: "text",
+      "class": "new-todo",
+      onkeyup: function onkeyup(e) {
+        return e.keyCode === 13 && e.target.value !== '' ? props.actions.add() : null;
+      },
+      oninput: function oninput(e) {
+        return props.actions.input({ value: e.target.value });
+      },
+      value: props.state.input,
+      placeholder: props.state.placeholder,
+      autofocus: true })
+  );
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+
+
+
+
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
+
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
+  };
+
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
+
+function wrap(classes, prefix) {
+  var value;
+  var className = "";
+  var type = typeof classes === "undefined" ? "undefined" : _typeof(classes);
+
+  if (classes && type === "string" || type === "number") {
+    return classes;
+  }
+
+  prefix = prefix || " ";
+
+  if (Array.isArray(classes) && classes.length) {
+    for (var i = 0, l = classes.length; i < l; i++) {
+      if (value = wrap(classes[i], prefix)) {
+        className += (className && prefix) + value;
+      }
+    }
+  } else {
+    for (var i in classes) {
+      if (classes.hasOwnProperty(i) && (value = classes[i])) {
+        className += (className && prefix) + i + ((typeof value === "undefined" ? "undefined" : _typeof(value)) === "object" ? wrap(value, prefix + i) : "");
+      }
+    }
+  }
+
+  return className;
+}
+
+var TodoItem = (function (props) {
+  return h(
+    'li',
+    { 'class': wrap(['todo', { 'completed': props.todo.done, 'editing': props.todo.editing }]) },
+    h(
+      'div',
+      { className: 'view' },
+      h('input', {
+        type: 'checkbox',
+        'class': 'toggle',
+        checked: props.todo.done ? true : false,
+        onclick: function onclick(e) {
+          return props.actions.toggle({ uuid: props.todo.id });
+        } }),
+      h(
+        'label',
+        { ondblclick: function ondblclick(e) {
+            return props.actions.editEnter({ uuid: props.todo.id });
+          } },
+        props.todo.value
+      ),
+      h('button', { 'class': 'destroy', onclick: function onclick(e) {
+          return props.actions.remove({ uuid: props.todo.id });
+        } })
+    ),
+    h('input', {
+      type: 'text',
+      'class': 'edit',
+      onkeyup: function onkeyup(e) {
+        return e.keyCode === 13 ? props.actions.editUpdate({ uuid: props.todo.id, value: e.target.value }) : null;
+      },
+      onblur: function onblur(e) {
+        return props.actions.editUpdate({ uuid: props.todo.id, value: e.target.value });
+      },
+      value: props.todo.value })
+  );
+});
+
+var TodoList = (function (props) {
+  return h(
+    'ul',
+    { 'class': 'todo-list' },
+    props.todos.filter(function (t) {
+      return props.filter === FILTERINFO.Completed ? t.done : props.filter === FILTERINFO.Active ? !t.done : props.filter === FILTERINFO.All;
+    }).map(function (todo) {
+      return h(TodoItem, { todo: todo, actions: props.actions });
+    })
+  );
+});
+
+var TodoFilter = (function (props) {
+  return h(
+    'footer',
+    { className: 'footer' },
+    h(
+      'span',
+      { className: 'todo-count' },
+      props.state.todos.filter(function (t) {
+        return !t.done;
+      }).length,
+      ' item left'
+    ),
+    h(
+      'ul',
+      { className: 'filters' },
+      Object.keys(FILTERINFO).map(function (key) {
+        return h(
+          'li',
+          null,
+          h(
+            'a',
+            {
+              href: '#',
+              'class': props.state.filter === FILTERINFO[key] ? 'selected' : '',
+              onclick: function onclick() {
+                return props.actions.filter({ value: FILTERINFO[key] });
+              } },
+            key
+          )
+        );
+      })
+    ),
+    h(
+      'button',
+      { className: 'clear-completed', onclick: props.actions.clearCompleted },
+      'Clear completed'
+    )
+  );
+});
+
+var view = (function (state, actions) {
+  return h(
+    'div',
+    { 'class': 'container' },
+    h(
+      'section',
+      { 'class': 'todoapp' },
+      h(TodoHeader, null),
+      h(TodoInput, { state: state, actions: actions }),
+      h(
+        'section',
+        { className: 'main' },
+        h('input', { type: 'checkbox', className: 'toggle-all', id: 'toggle-all' }),
+        h(
+          'label',
+          { htmlFor: 'toggle-all', onclick: actions.toggleAll },
+          'Mark all as complete'
+        ),
+        h(TodoList, { todos: state.todos, actions: actions, filter: state.filter })
+      ),
+      h(TodoFilter, { state: state, actions: actions })
+    ),
+    h(TodoFooter, null)
+  );
+});
+
+app({ state: state, actions: actions, view: view }, document.getElementById('app'));
+
+})));
+//# sourceMappingURL=app.js.map
