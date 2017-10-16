@@ -1,21 +1,22 @@
 import { h } from 'hyperapp'
+import cw from 'classwrap'
 
 export default (props) => (
-  <li class={props.todo.done ? 'todo completed' : 'todo'}>
+  <li class={cw(['todo', { 'completed': props.todo.done, 'editing': props.todo.editing }])}>
     <div className="view">
       <input 
         type="checkbox" 
         class="toggle" 
         checked={props.todo.done ? true : false} 
         onclick={e => props.actions.toggle({ uuid: props.todo.id })}/>
-      <label 
-        contenteditable="true"
-        onkeyup={e => e.keyCode === 13 ? props.actions.editEnter({ uuid: props.todo.id, value: e.target.textContent }) : null}
-        oninput={e => (props.todo.value = e.target.textContent || '')}
-        onblur={props.actions.edit}>
-        {props.todo.value}
-      </label>
+      <label ondblclick={e => props.actions.editEnter({ uuid: props.todo.id })}>{props.todo.value}</label>
       <button class="destroy" onclick={e => props.actions.remove({ uuid: props.todo.id })}></button>
     </div>
+    <input
+      type="text" 
+      class="edit"
+      onkeyup={e => e.keyCode === 13 ? props.actions.editUpdate({ uuid: props.todo.id, value: e.target.value }) : null}
+      onblur={e => props.actions.editUpdate({ uuid: props.todo.id, value: e.target.value })} 
+      value={props.todo.value}/>
   </li>
 )

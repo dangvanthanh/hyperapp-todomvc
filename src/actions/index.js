@@ -8,16 +8,17 @@ export default {
     input: '',
     todos: state.todos.concat({ 
       id: uuid(), 
-      done: false, 
-      value: state.input 
+      done: false,
+      editing: false,
+      value: state.input
     })
   }),
-  editEnter: (state, actions, { uuid, value }) => ({
-    todos: state.todos.map(t => uuid === t.id ? Object.assign({}, t, { value: value }) : t)
+  editUpdate: (state, actions, { uuid, value }) => ({
+    todos: state.todos.map(t => uuid === t.id ? Object.assign({}, t, { editing: false, value: value }) : t)
   }),
-  edit: (state, actions, e) => {
-    e.target.blur()
-  },
+  editEnter: (state, actions, { uuid }) => ({
+    todos: state.todos.map(t => uuid === t.id ? Object.assign({}, t, { editing: true }) : t)
+  }),
   remove: (state, actions, { uuid }) => ({
     todos: state.todos.filter(t => uuid !== t.id)
   }),

@@ -18,6 +18,5 @@ export default (state, actions) => (
       <TodoFilter state={state} actions={actions} />
     </section>
     <TodoFooter/>
-    {JSON.stringify(state.todos)}
   </div>
 )
