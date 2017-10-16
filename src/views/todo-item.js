@@ -2,7 +2,8 @@ import { h } from 'hyperapp'
 import cw from 'classwrap'
 
 export default (props) => (
-  <li class={cw(['todo', { 'completed': props.todo.done, 'editing': props.todo.editing }])}>
+  <li class={cw(['todo', { 'completed': props.todo.done, 'editing': props.todo.editing }])}
+      key={props.todo.id}>
     <div className="view">
       <input 
         type="checkbox" 

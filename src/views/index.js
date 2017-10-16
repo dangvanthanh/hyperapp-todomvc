@@ -12,7 +12,7 @@ export default (state, actions) => (
       <TodoInput state={state} actions={actions} />
       <section className="main">
         <input type="checkbox" className="toggle-all" id="toggle-all"/>
-        <label htmlFor="toggle-all" onclick={actions.toggleAll}>Mark all as complete</label>
+        <label htmlFor="toggle-all" onclick={e => actions.toggleAll(e)}>Mark all as complete</label>
         <TodoList todos={state.todos} actions={actions} filter={state.filter} />
       </section>
       <TodoFilter state={state} actions={actions} />

@@ -337,10 +337,12 @@ var actions = {
       })
     };
   },
-  toggleAll: function toggleAll(state) {
+  toggleAll: function toggleAll(state, actions, e) {
+    var isCheckedAll = e.target.previousSibling.checked;
+    isCheckedAll = !isCheckedAll;
     return {
       todos: state.todos.map(function (t) {
-        t.done = !t.done;
+        t.done = isCheckedAll;
         return t;
       })
     };
@@ -582,7 +584,8 @@ function wrap(classes, prefix) {
 var TodoItem = (function (props) {
   return h(
     'li',
-    { 'class': wrap(['todo', { 'completed': props.todo.done, 'editing': props.todo.editing }]) },
+    { 'class': wrap(['todo', { 'completed': props.todo.done, 'editing': props.todo.editing }]),
+      key: props.todo.id },
     h(
       'div',
       { className: 'view' },
@@ -629,6 +632,14 @@ var TodoList = (function (props) {
   );
 });
 
+var TodoClearButton = (function (props) {
+  return h(
+    "button",
+    { className: "clear-completed", onclick: props.clearCompleted },
+    "Clear completed"
+  );
+});
+
 var TodoFilter = (function (props) {
   return h(
     'footer',
@@ -661,11 +672,9 @@ var TodoFilter = (function (props) {
         );
       })
     ),
-    h(
-      'button',
-      { className: 'clear-completed', onclick: props.actions.clearCompleted },
-      'Clear completed'
-    )
+    props.state.todos.filter(function (t) {
+      return t.done;
+    }).length > 0 ? h(TodoClearButton, { clearCompleted: props.actions.clearCompleted }) : ''
   );
 });
 
@@ -684,7 +693,9 @@ var view = (function (state, actions) {
         h('input', { type: 'checkbox', className: 'toggle-all', id: 'toggle-all' }),
         h(
           'label',
-          { htmlFor: 'toggle-all', onclick: actions.toggleAll },
+          { htmlFor: 'toggle-all', onclick: function onclick(e) {
+              return actions.toggleAll(e);
+            } },
           'Mark all as complete'
         ),
         h(TodoList, { todos: state.todos, actions: actions, filter: state.filter })

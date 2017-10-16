@@ -25,12 +25,16 @@ export default {
   toggle: (state, actions, { uuid }) => ({
     todos: state.todos.map(t => uuid === t.id ? Object.assign({}, t, { done: !t.done }) : t)
   }),
-  toggleAll: (state) => ({
-    todos: state.todos.map(t => {
-      t.done = !t.done
-      return t
+  toggleAll: (state, actions, e) => {
+    let isCheckedAll = e.target.previousSibling.checked
+    isCheckedAll = !isCheckedAll
+    return ({
+      todos: state.todos.map(t => {
+        t.done = isCheckedAll
+        return t
+      })
     })
-  }),
+  },
   filter: (state, actions, { value }) => ({ filter: value }),
   clearCompleted: (state) => ({
     todos: state.todos.filter(t => !t.done)

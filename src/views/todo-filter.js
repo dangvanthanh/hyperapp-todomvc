@@ -1,5 +1,6 @@
 import { h } from 'hyperapp'
 import { FILTERINFO } from '../utils'
+import TodoClearButton from './todo-clear-button'
 
 export default (props) => (
   <footer className="footer">
@@ -16,6 +17,6 @@ export default (props) => (
         </li>
       ))}
     </ul>
-    <button className="clear-completed" onclick={props.actions.clearCompleted}>Clear completed</button>
+    {props.state.todos.filter(t => t.done).length > 0 ? <TodoClearButton clearCompleted={props.actions.clearCompleted} /> : ''}
   </footer>
 )
