@@ -286,6 +286,17 @@ var uuid = function uuid() {
   });
 };
 
+var STORAGE_KEY = 'todos-hyperapp';
+
+var store = {
+  fetch: function fetch() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  },
+  save: function save(todos) {
+    return localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  }
+};
+
 var actions = {
   input: function input(state, actions, _ref) {
     var value = _ref.value;
@@ -294,57 +305,73 @@ var actions = {
     };
   },
   add: function add(state) {
+    var todos = state.todos.concat({
+      id: uuid(),
+      done: false,
+      editing: false,
+      value: state.input
+    });
+    store.save(todos);
     return {
       input: '',
-      todos: state.todos.concat({
-        id: uuid(),
-        done: false,
-        editing: false,
-        value: state.input
-      })
+      todos: todos
     };
   },
   editUpdate: function editUpdate(state, actions, _ref2) {
     var uuid$$1 = _ref2.uuid,
         value = _ref2.value;
+
+    var todos = state.todos.map(function (t) {
+      return uuid$$1 === t.id ? Object.assign({}, t, { editing: false, value: value }) : t;
+    });
+    store.save(todos);
     return {
-      todos: state.todos.map(function (t) {
-        return uuid$$1 === t.id ? Object.assign({}, t, { editing: false, value: value }) : t;
-      })
+      todos: todos
     };
   },
   editEnter: function editEnter(state, actions, _ref3) {
     var uuid$$1 = _ref3.uuid;
+
+    var todos = state.todos.map(function (t) {
+      return uuid$$1 === t.id ? Object.assign({}, t, { editing: true }) : t;
+    });
+    store.save(todos);
     return {
-      todos: state.todos.map(function (t) {
-        return uuid$$1 === t.id ? Object.assign({}, t, { editing: true }) : t;
-      })
+      todos: todos
     };
   },
   remove: function remove(state, actions, _ref4) {
     var uuid$$1 = _ref4.uuid;
+
+    var todos = state.todos.filter(function (t) {
+      return uuid$$1 !== t.id;
+    });
+    store.save(todos);
     return {
-      todos: state.todos.filter(function (t) {
-        return uuid$$1 !== t.id;
-      })
+      todos: todos
     };
   },
   toggle: function toggle(state, actions, _ref5) {
     var uuid$$1 = _ref5.uuid;
+
+    var todos = state.todos.map(function (t) {
+      return uuid$$1 === t.id ? Object.assign({}, t, { done: !t.done }) : t;
+    });
+    store.save(todos);
     return {
-      todos: state.todos.map(function (t) {
-        return uuid$$1 === t.id ? Object.assign({}, t, { done: !t.done }) : t;
-      })
+      todos: todos
     };
   },
   toggleAll: function toggleAll(state, actions, e) {
     var isCheckedAll = e.target.previousSibling.checked;
     isCheckedAll = !isCheckedAll;
+    var todos = state.todos.map(function (t) {
+      t.done = isCheckedAll;
+      return t;
+    });
+    store.save(todos);
     return {
-      todos: state.todos.map(function (t) {
-        t.done = isCheckedAll;
-        return t;
-      })
+      todos: todos
     };
   },
   filter: function filter(state, actions, _ref6) {
@@ -352,10 +379,12 @@ var actions = {
     return { filter: value };
   },
   clearCompleted: function clearCompleted(state) {
+    var todos = state.todos.filter(function (t) {
+      return !t.done;
+    });
+    store.save(todos);
     return {
-      todos: state.todos.filter(function (t) {
-        return !t.done;
-      })
+      todos: todos
     };
   }
 };
@@ -706,7 +735,11 @@ var view = (function (state, actions) {
   );
 });
 
-app({ state: state, actions: actions, view: view }, document.getElementById('app'));
+var init = function init(state$$1) {
+  state$$1.todos = store.fetch();
+};
+
+app({ init: init, state: state, actions: actions, view: view }, document.getElementById('app'));
 
 })));
 //# sourceMappingURL=app.js.map
