@@ -628,7 +628,7 @@ var TodoItem = (function (props) {
       h(
         'label',
         { ondblclick: function ondblclick(e) {
-            return props.actions.editEnter({ uuid: props.todo.id });
+            return props.actions.editEnter({ uuid: props.todo.id, e: e });
           } },
         props.todo.value
       ),
@@ -707,6 +707,21 @@ var TodoFilter = (function (props) {
   );
 });
 
+var TodoToggleAll = (function (props) {
+  return h(
+    "div",
+    null,
+    h("input", { type: "checkbox", className: "toggle-all", id: "toggle-all" }),
+    h(
+      "label",
+      { htmlFor: "toggle-all", onclick: function onclick(e) {
+          return props.toggleAll(e);
+        } },
+      "Mark all as complete"
+    )
+  );
+});
+
 var view = (function (state, actions) {
   return h(
     'div',
@@ -719,14 +734,9 @@ var view = (function (state, actions) {
       h(
         'section',
         { className: 'main' },
-        h('input', { type: 'checkbox', className: 'toggle-all', id: 'toggle-all' }),
-        h(
-          'label',
-          { htmlFor: 'toggle-all', onclick: function onclick(e) {
-              return actions.toggleAll(e);
-            } },
-          'Mark all as complete'
-        ),
+        state.todos.filter(function (t) {
+          return !t.done;
+        }).length > 0 ? h(TodoToggleAll, { toggleAll: actions.toggleAll }) : '',
         h(TodoList, { todos: state.todos, actions: actions, filter: state.filter })
       ),
       h(TodoFilter, { state: state, actions: actions })

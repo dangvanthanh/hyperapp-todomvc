@@ -25,7 +25,7 @@ export default {
       todos: todos
     })
   },
-  editEnter: (state, actions, { uuid }) => {
+  editEnter: (state, actions, { uuid, e }) => {
     const todos = state.todos.map(t => uuid === t.id ? Object.assign({}, t, { editing: true }) : t)
     store.save(todos)
     return ({

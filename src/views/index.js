@@ -4,6 +4,7 @@ import TodoFooter from './todo-footer'
 import TodoInput from './todo-input'
 import TodoList from './todo-list'
 import TodoFilter from './todo-filter'
+import TodoToggleAll from './todo-toggle-all'
 
 export default (state, actions) => (
   <div class="container">
@@ -11,8 +12,7 @@ export default (state, actions) => (
       <TodoHeader/>
       <TodoInput state={state} actions={actions} />
       <section className="main">
-        <input type="checkbox" className="toggle-all" id="toggle-all"/>
-        <label htmlFor="toggle-all" onclick={e => actions.toggleAll(e)}>Mark all as complete</label>
+        {state.todos.filter(t => !t.done).length > 0 ? <TodoToggleAll toggleAll={actions.toggleAll} /> : ''}
         <TodoList todos={state.todos} actions={actions} filter={state.filter} />
       </section>
       <TodoFilter state={state} actions={actions} />
