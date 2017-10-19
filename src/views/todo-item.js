@@ -10,7 +10,7 @@ export default (props) => (
         class="toggle" 
         checked={props.todo.done ? true : false} 
         onclick={e => props.actions.toggle({ uuid: props.todo.id })}/>
-      <label ondblclick={e => props.actions.editEnter({ uuid: props.todo.id, e: e })}>{props.todo.value}</label>
+      <label ondblclick={e => props.actions.editEnter({ uuid: props.todo.id })}>{props.todo.value}</label>
       <button class="destroy" onclick={e => props.actions.remove({ uuid: props.todo.id })}></button>
     </div>
     <input
