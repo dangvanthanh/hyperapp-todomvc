@@ -6,3 +6,8 @@ export const uuid = () => {
     return v.toString(16)
   })
 }
+
+export const assignTodoById = (todos, id, ...todo) => {
+  let todoItem = todo[0]
+  return todos.map(t => id === t.id ? Object.assign({}, t, todoItem) : t)
+}

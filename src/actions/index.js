@@ -1,4 +1,4 @@
-import { uuid } from '../utils'
+import { uuid, assignTodoById } from '../utils'
 import store from '../store'
 
 export default {
@@ -19,18 +19,26 @@ export default {
     })
   },
   editUpdate: (state, actions, { uuid, value }) => {
-    const todos = state.todos.map(t => uuid === t.id ? Object.assign({}, t, { editing: false, value: value }) : t)
+    const todos = assignTodoById(state.todos, uuid, { editing: false, value: value  })
     store.save(todos)
     return ({
       todos: todos
     })
   },
-  editEnter: (state, actions, { uuid }) => {
-    const todos = state.todos.map(t => uuid === t.id ? Object.assign({}, t, { editing: true }) : t)
+  editEnter: (state, actions, { uuid, e }) => {
+    actions.editEnterDbClick(uuid)
+    actions.editEnterFocus(e)
+  },
+  editEnterDbClick: (state, actions, uuid) => {
+    const todos = assignTodoById(state.todos, uuid, { editing: true })
     store.save(todos)
     return ({
-      todos: todos 
+      todos: todos
     })
+  },
+  editEnterFocus: (state, actions, e) => {
+    const input = e.target.parentNode.parentNode.querySelector('.edit')
+    input.focus()
   },
   remove: (state, actions, { uuid }) => { 
     const todos = state.todos.filter(t => uuid !== t.id)
