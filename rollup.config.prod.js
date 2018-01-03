@@ -21,6 +21,7 @@ const plugins = [
 let config = {
   input: './src/app.js',
   output: {
+    name: 'app',
     file: './dist/app.js',
     format: 'umd',
     sourcemap: false
