@@ -4,12 +4,10 @@ import state from './state'
 import view from './views'
 import store from './store'
 
-const init = (state) => {
-  state.todos = store.fetch()
-  state.todos = state.todos.map(todo => {
-    todo.editing = false
-    return todo
-  })
-}
+state.todos = store.fetch()
+state.todos = state.todos.map(todo => {
+  todo.editing = false
+  return todo
+})
 
-app({ init, state, actions, view }, document.getElementById('app'))
+export const main = app(state, actions, view, document.getElementById('app'))
