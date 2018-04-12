@@ -1,7 +1,7 @@
-import { h } from 'hyperapp'
+import { h } from 'hyperapp';
 
-export default (props) => (
+export default props => (
   <button className="clear-completed" onclick={props.clearCompleted}>
     Clear completed
   </button>
-)
+);

@@ -1,7 +1,7 @@
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
-import uglify from 'rollup-plugin-uglify'
-import css from 'rollup-plugin-css-only'
+import babel from 'rollup-plugin-babel';
+import resolve from 'rollup-plugin-node-resolve';
+import uglify from 'rollup-plugin-uglify';
+import css from 'rollup-plugin-css-only';
 
 const plugins = [
   babel({
@@ -16,7 +16,7 @@ const plugins = [
     output: './dist/app.css'
   }),
   uglify()
-]
+];
 
 let config = {
   input: './src/app.js',
@@ -27,6 +27,6 @@ let config = {
     sourcemap: false
   },
   plugins: plugins
-}
+};
 
-export default config
+export default config;

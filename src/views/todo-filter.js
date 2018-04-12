@@ -1,5 +1,5 @@
-import {h} from 'hyperapp';
-import {FILTERINFO} from '../utils';
+import { h } from 'hyperapp';
+import { FILTERINFO } from '../utils';
 import TodoClearButton from './todo-clear-button';
 
 export default props => (
@@ -13,7 +13,8 @@ export default props => (
           <a
             href="#"
             class={props.state.filter === FILTERINFO[key] ? 'selected' : ''}
-            onclick={() => props.actions.filter({value: FILTERINFO[key]})}>
+            onclick={() => props.actions.filter({ value: FILTERINFO[key] })}
+          >
             {key}
           </a>
         </li>

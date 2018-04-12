@@ -1,8 +1,8 @@
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
-import livereload from 'rollup-plugin-livereload'
-import serve from 'rollup-plugin-serve'
-import css from 'rollup-plugin-css-only'
+import babel from 'rollup-plugin-babel';
+import resolve from 'rollup-plugin-node-resolve';
+import livereload from 'rollup-plugin-livereload';
+import serve from 'rollup-plugin-serve';
+import css from 'rollup-plugin-css-only';
 
 const plugins = [
   babel({
@@ -22,7 +22,7 @@ const plugins = [
     port: 8080,
     open: true
   })
-]
+];
 
 let config = {
   input: './src/app.js',
@@ -33,6 +33,6 @@ let config = {
     sourcemap: true
   },
   plugins: plugins
-}
+};
 
-export default config
+export default config;
