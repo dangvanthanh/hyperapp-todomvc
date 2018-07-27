@@ -18,21 +18,21 @@
   },
   "homepage": "https://github.com/dangvanthanh/hyperapp-todomvc#readme",
   "dependencies": {
-    "classcat": "^3.0.2",
-    "hyperapp": "^1.2.5",
-    "todomvc-app-css": "^2.1.1",
+    "classcat": "^3.1.2",
+    "hyperapp": "^1.2.8",
+    "todomvc-app-css": "^2.1.2",
     "todomvc-common": "^1.0.5"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-es2015-rollup": "^3.0.0",
-    "rollup": "^0.57.1",
-    "rollup-plugin-babel": "^3.0.3",
+    "rollup": "^0.63.4",
+    "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-css-only": "^0.4.0",
     "rollup-plugin-livereload": "^0.6.0",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-serve": "^0.4.2",
-    "rollup-plugin-uglify": "^3.0.0"
+    "rollup-plugin-uglify": "^4.0.0"
   }
 }

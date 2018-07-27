@@ -11,7 +11,6 @@ export default props => (
       oninput={e => props.actions.input({ value: e.target.value })}
       value={props.state.input}
       placeholder={props.state.placeholder}
-      autofocus
     />
   </div>
 );
