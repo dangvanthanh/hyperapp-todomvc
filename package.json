@@ -4,8 +4,7 @@
   "description": "TodoMVC using Hyperapp",
   "main": "index.js",
   "scripts": {
-    "dev": "rollup -c rollup.config.js -w",
-    "build": "rollup -c rollup.config.prod.js"
+    "start": "parcel public/index.html --open"
   },
   "repository": {
     "type": "git",
@@ -18,21 +17,14 @@
   },
   "homepage": "https://github.com/dangvanthanh/hyperapp-todomvc#readme",
   "dependencies": {
-    "classcat": "^3.1.2",
-    "hyperapp": "^1.2.8",
+    "classcat": "^3.2.3",
+    "hyperapp": "^1.2.9",
     "todomvc-app-css": "^2.1.2",
     "todomvc-common": "^1.0.5"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-es2015-rollup": "^3.0.0",
-    "rollup": "^0.63.4",
-    "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-css-only": "^0.4.0",
-    "rollup-plugin-livereload": "^0.6.0",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-serve": "^0.4.2",
-    "rollup-plugin-uglify": "^4.0.0"
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-hyperapp": "^2.3.0",
+    "parcel-bundler": "^1.10.3"
   }
 }
