@@ -5,10 +5,10 @@ export default props => (
     <input
       type="text"
       class="new-todo"
-      onkeyup={e =>
+      onkeyup={(e) =>
         e.keyCode === 13 && e.target.value !== '' ? props.actions.add() : null
       }
-      oninput={e => props.actions.input({ value: e.target.value })}
+      oninput={(e) => props.actions.input({ value: e.target.value })}
       value={props.state.input}
       placeholder={props.state.placeholder}
     />

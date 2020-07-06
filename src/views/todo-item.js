@@ -29,7 +29,7 @@ export default props => (
     <input
       type="text"
       class="edit"
-      onkeyup={e =>
+      onKeyup={e =>
         e.keyCode === 13
           ? props.actions.editUpdate({
               uuid: props.todo.id,

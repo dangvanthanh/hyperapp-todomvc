@@ -1,4 +1,4 @@
-import { app } from 'hyperapp';
+import { h, app } from 'hyperapp';
 import actions from './actions';
 import state from './state';
 import view from './views';
@@ -10,4 +10,8 @@ state.todos = state.todos.map(todo => {
   return todo;
 });
 
-export const main = app(state, actions, view, document.getElementById('app'));
+export const main = app({
+  init: state,
+  view,
+  node: document.getElementById("app")
+});
