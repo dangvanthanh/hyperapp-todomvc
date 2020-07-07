@@ -1,46 +1,49 @@
 import { h } from 'hyperapp';
 import cc from 'classcat';
+import actions from '../actions';
 
-export default props => (
+const TodoItem = ({ todo }) => (
   <li
     class={cc([
       'todo',
-      { completed: props.todo.done, editing: props.todo.editing }
+      { completed: todo.done, editing: todo.editing },
     ])}
-    key={props.todo.id}
+    key={todo.id}
   >
     <div className="view">
       <input
         type="checkbox"
         class="toggle"
-        checked={!!props.todo.done}
-        onclick={e => props.actions.toggle({ uuid: props.todo.id })}
+        checked={!!todo.done}
+        onclick={(e) => actions.toggle({ uuid: todo.id })}
       />
       <label
-        ondblclick={e => props.actions.editEnter({ uuid: props.todo.id, e: e })}
+        ondblclick={(e) => actions.editEnter({ uuid: todo.id, e: e })}
       >
-        {props.todo.value}
+        {todo.value}
       </label>
       <button
         class="destroy"
-        onclick={e => props.actions.remove({ uuid: props.todo.id })}
+        onclick={(e) => actions.remove({ uuid: todo.id })}
       />
     </div>
     <input
       type="text"
       class="edit"
-      onKeyup={e =>
+      onKeyup={(e) =>
         e.keyCode === 13
-          ? props.actions.editUpdate({
-              uuid: props.todo.id,
-              value: e.target.value
+          ? actions.editUpdate({
+              uuid: todo.id,
+              value: e.target.value,
             })
           : null
       }
-      onblur={e =>
-        props.actions.editUpdate({ uuid: props.todo.id, value: e.target.value })
+      onblur={(e) =>
+        actions.editUpdate({ uuid: todo.id, value: e.target.value })
       }
-      value={props.todo.value}
+      value={todo.value}
     />
   </li>
 );
+
+export default TodoItem;

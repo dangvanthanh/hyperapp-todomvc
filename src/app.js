@@ -1,17 +1,18 @@
 import { h, app } from 'hyperapp';
-import actions from './actions';
-import state from './state';
-import view from './views';
-import store from './store';
+import appState from './state';
+import appStore from './store';
+import App from './views';
 
-state.todos = store.fetch();
-state.todos = state.todos.map(todo => {
+appState.todos = appStore.fetch();
+appState.todos = appState.todos.map(todo => {
   todo.editing = false;
   return todo;
 });
 
-export const main = app({
-  init: state,
-  view,
-  node: document.getElementById("app")
+const InitApp = state => state;
+
+app({
+  init: InitApp(appState),
+  view: <App />,
+  node: document.getElementById('app')
 });

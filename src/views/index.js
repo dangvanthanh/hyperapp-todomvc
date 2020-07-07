@@ -6,21 +6,23 @@ import TodoList from './todo-list';
 import TodoFilter from './todo-filter';
 import TodoToggleAll from './todo-toggle-all';
 
-export default (state, actions) => (
+const App = () => (state) => (
   <div class="container">
     <section class="todoapp">
       <TodoHeader />
-      <TodoInput state={state} actions={actions} />
+      <TodoInput state={state} />
       <section className="main">
-        {state.todos.filter(t => !t.done).length > 0 ? (
-          <TodoToggleAll toggleAll={actions.toggleAll} />
+        {state.todos.filter((t) => !t.done).length > 0 ? (
+          <TodoToggleAll />
         ) : (
           ''
         )}
-        <TodoList todos={state.todos} actions={actions} filter={state.filter} />
+        <TodoList todos={state.todos} filter={state.filter} />
       </section>
-      <TodoFilter state={state} actions={actions} />
+      <TodoFilter state={state} />
     </section>
     <TodoFooter />
   </div>
 );
+
+export default App;

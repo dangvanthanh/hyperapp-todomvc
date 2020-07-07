@@ -2,17 +2,20 @@ import { h } from 'hyperapp';
 import { FILTERINFO } from '../utils';
 import TodoItem from './todo-item';
 
-export default props => (
+const TodoList = ({ todos, filter }) => (
   <ul class="todo-list">
-    {props.todos
-      .filter(
-        t =>
-          props.filter === FILTERINFO.Completed
-            ? t.done
-            : props.filter === FILTERINFO.Active
-              ? !t.done
-              : props.filter === FILTERINFO.All
+    {todos
+      .filter((t) =>
+        filter === FILTERINFO.Completed
+          ? t.done
+          : filter === FILTERINFO.Active
+          ? !t.done
+          : filter === FILTERINFO.All
       )
-      .map(todo => <TodoItem todo={todo} actions={props.actions} />)}
+      .map((todo) => (
+        <TodoItem todo={todo} />
+      ))}
   </ul>
 );
+
+export default TodoList;
