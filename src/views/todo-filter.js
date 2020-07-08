@@ -1,7 +1,19 @@
 import { h } from 'hyperapp';
 import { FILTERINFO } from '../utils';
 import TodoClearButton from './todo-clear-button';
-import actions from '../actions';
+import store from '../store';
+
+const ClearCompleted = (state) => {
+  const todos = state.todos.filter((t) => !t.done);
+  store.save(todos);
+  const newState = { ...state, todos };
+  return newState;
+};
+
+const FilterTodo = (state, filter) => {
+  const newState = { ...state, filter };
+  return newState;
+};
 
 const TodoFilter = (props) => (
   <footer className="footer">
@@ -14,7 +26,7 @@ const TodoFilter = (props) => (
           <a
             href="#"
             class={props.state.filter === FILTERINFO[key] ? 'selected' : ''}
-            onclick={() => actions.filter({ value: FILTERINFO[key] })}
+            onclick={(state, e) => FilterTodo(state, FILTERINFO[key])}
           >
             {key}
           </a>
@@ -22,7 +34,7 @@ const TodoFilter = (props) => (
       ))}
     </ul>
     {props.state.todos.filter((t) => t.done).length > 0 ? (
-      <TodoClearButton clearCompleted={actions.clearCompleted} />
+      <TodoClearButton clearCompleted={ClearCompleted} />
     ) : (
       ''
     )}

@@ -15,8 +15,8 @@ const OnInput = (state, event) => {
   return newState;
 };
 
-const AddTodo = (state, e) => {
-  const todos = state.todos.concat(NewTodo(e.target.value));
+const AddTodo = (state, event) => {
+  const todos = state.todos.concat(NewTodo(event.target.value));
   store.save(todos);
   const newState = { ...state, input: '', todos };
   return newState;
