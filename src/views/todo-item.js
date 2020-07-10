@@ -1,7 +1,7 @@
 import { h } from 'hyperapp';
 import cc from 'classcat';
 import store from '../store';
-import { assignTodoById, uuid } from '../utils';
+import { assignTodoById } from '../utils';
 
 const RemoveTodo = (state, uuid) => {
   const todos = state.todos.filter((t) => uuid !== t.id);
