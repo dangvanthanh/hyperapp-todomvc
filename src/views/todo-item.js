@@ -1,17 +1,16 @@
 import { h } from 'hyperapp';
-import cc from 'classcat';
 import store from '../store';
 import { assignTodoById } from '../utils';
 
 const RemoveTodo = (state, uuid) => {
-  const todos = state.todos.filter((t) => uuid !== t.id);
+  const todos = state.todos.filter(t => uuid !== t.id);
   store.save(todos);
   const newState = { ...state, todos };
   return newState;
 };
 
 const ToggleTodo = (state, uuid) => {
-  const todos = state.todos.map((t) =>
+  const todos = state.todos.map(t =>
     uuid === t.id ? Object.assign({}, t, { done: !t.done }) : t
   );
   store.save(todos);
@@ -31,7 +30,7 @@ const EditEnterTodo = (state, e, uuid) => {
 const EditUpdateTodo = (state, e, uuid) => {
   const todos = assignTodoById(state.todos, uuid, {
     editing: false,
-    value: e.target.value,
+    value: e.target.value
   });
   store.save(todos);
   const newState = { ...state, todos };
@@ -40,7 +39,7 @@ const EditUpdateTodo = (state, e, uuid) => {
 
 const TodoItem = ({ todo }) => (
   <li
-    class={cc(['todo', { completed: todo.done, editing: todo.editing }])}
+    class={['todo', { completed: todo.done, editing: todo.editing }]}
     key={todo.id}
   >
     <div className="view">
@@ -58,7 +57,7 @@ const TodoItem = ({ todo }) => (
     <input
       type="text"
       class="edit"
-      onKeyup={(state, e) => {
+      onkeyup={(state, e) => {
         if (e.keyCode === 13) {
           return EditUpdateTodo(state, e, todo.id);
         }
