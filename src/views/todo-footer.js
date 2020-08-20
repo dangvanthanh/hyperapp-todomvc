@@ -1,13 +1,15 @@
-import { h } from 'hyperapp';
+import { text } from 'hyperapp';
+import { footer, p, a } from '@hyperapp/html';
 
-export default () => (
-  <footer className="info">
-    <p>Double-click to edit a todo</p>
-    <p>
-      Written by <a href="http://dangthanh.org">Dang Van Thanh</a>
-    </p>
-    <p>
-      Part of <a href="http://todomvc.com">TodoMVC</a>
-    </p>
-  </footer>
-);
+export default () =>
+  footer({ class: 'info' }, [
+    p({}, text('Double-click to edit a todo')),
+    p({}, [
+      text('Written by '),
+      a({ href: 'http://dangthanh.org' }, text('Dang Van Thanh')),
+    ]),
+    p({}, [
+      text('Part of '),
+      a({ href: 'http://todomvc.com' }, text('TodoMVC')),
+    ]),
+  ]);

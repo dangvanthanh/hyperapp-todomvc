@@ -1,5 +1,5 @@
-import { h } from 'hyperapp';
-import { uuid } from '../utils';
+import { div, input } from '@hyperapp/html';
+import { ENTER_KEY, uuid } from '../utils';
 import store from '../store';
 
 const NewTodo = (value) => ({
@@ -22,22 +22,23 @@ const AddTodo = (state, event) => {
   return newState;
 };
 
-const TodoInput = (props) => (
-  <div>
-    <input
-      type="text"
-      class="new-todo"
-      onkeydown={(state, e) => {
-        if (e.keyCode === 13 && e.target.value !== '') {
-          return AddTodo(state, e);
-        }
-        return state;
-      }}
-      onInput={OnInput}
-      value={props.state.input}
-      placeholder={props.state.placeholder}
-    />
-  </div>
-);
+const OnKeyDown = (state, event) => {
+  if (event.keyCode === ENTER_KEY && event.target.value !== '') {
+    return AddTodo(state, e);
+  }
+  return state;
+};
+
+const TodoInput = (props) =>
+  div({}, [
+    input({
+      type: 'text',
+      class: 'new-todo',
+      onkeydown: { OnKeyDown },
+      oninput: OnInput,
+      value: props.input,
+      placeholder: props.placeholder,
+    }),
+  ]);
 
 export default TodoInput;

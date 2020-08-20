@@ -1,7 +1,4 @@
-import { h } from 'hyperapp';
+import { text } from 'hyperapp';
+import { header, h1 } from '@hyperapp/html';
 
-export default () => (
-  <header className="header">
-    <h1>todos</h1>
-  </header>
-);
+export default () => header({ class: 'header' }, [h1({}, text('todos'))]);

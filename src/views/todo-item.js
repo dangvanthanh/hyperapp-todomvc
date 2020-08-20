@@ -1,16 +1,17 @@
-import { h } from 'hyperapp';
+import { text } from 'hyperapp';
+import { div, li, input, label, button } from '@hyperapp/html';
 import store from '../store';
 import { assignTodoById } from '../utils';
 
 const RemoveTodo = (state, uuid) => {
-  const todos = state.todos.filter(t => uuid !== t.id);
+  const todos = state.todos.filter((t) => uuid !== t.id);
   store.save(todos);
   const newState = { ...state, todos };
   return newState;
 };
 
 const ToggleTodo = (state, uuid) => {
-  const todos = state.todos.map(t =>
+  const todos = state.todos.map((t) =>
     uuid === t.id ? Object.assign({}, t, { done: !t.done }) : t
   );
   store.save(todos);
@@ -30,43 +31,76 @@ const EditEnterTodo = (state, e, uuid) => {
 const EditUpdateTodo = (state, e, uuid) => {
   const todos = assignTodoById(state.todos, uuid, {
     editing: false,
-    value: e.target.value
+    value: e.target.value,
   });
   store.save(todos);
   const newState = { ...state, todos };
   return newState;
 };
 
-const TodoItem = ({ todo }) => (
-  <li
-    class={['todo', { completed: todo.done, editing: todo.editing }]}
-    key={todo.id}
-  >
-    <div className="view">
-      <input
-        type="checkbox"
-        class="toggle"
-        checked={!!todo.done}
-        onclick={[ToggleTodo, todo.id]}
-      />
-      <label ondblclick={(state, e) => EditEnterTodo(state, e, todo.id)}>
-        {todo.value}
-      </label>
-      <button class="destroy" onclick={[RemoveTodo, todo.id]} />
-    </div>
-    <input
-      type="text"
-      class="edit"
-      onkeyup={(state, e) => {
-        if (e.keyCode === 13) {
-          return EditUpdateTodo(state, e, todo.id);
-        }
-        return state;
-      }}
-      onblur={(state, e) => EditUpdateTodo(state, e, todo.id)}
-      value={todo.value}
-    />
-  </li>
-);
+const OnKeyUp = (state, e) => {
+  if (e.keyCode === ENTER_KEY) {
+    return EditUpdateTodo(state, e, todo.id);
+  }
+  return state;
+};
+
+const OnBlur = (state, e) => {
+  EditUpdateTodo(state, e, todo.id);
+};
+
+const OnDblClick = (state, e, todoId) => {
+  EditEnterTodo(state, e, todoId);
+};
+
+const TodoItem = ({todo}) =>
+  li({}, [
+    div({ class: 'view' }, [
+      input({
+        type: 'checkbox',
+        class: 'toggle',
+        checked: !!todo.done,
+      }),
+      label({}, text(todo.value)),
+      button({ class: 'destroy' }, text('')),
+    ]),
+    input({
+      type: 'text',
+      class: 'edit',
+      value: todo.value,
+    }),
+  ]);
+
+// const TodoItem = ({ todo }) => (
+//   <li
+//     class={['todo', { completed: todo.done, editing: todo.editing }]}
+//     key={todo.id}
+//   >
+//     <div className="view">
+//       <input
+//         type="checkbox"
+//         class="toggle"
+//         checked={!!todo.done}
+//         onclick={[ToggleTodo, todo.id]}
+//       />
+//       <label ondblclick={(state, e) => EditEnterTodo(state, e, todo.id)}>
+//         {todo.value}
+//       </label>
+//       <button class="destroy" onclick={[RemoveTodo, todo.id]} />
+//     </div>
+//     <input
+//       type="text"
+//       class="edit"
+//       onkeyup={(state, e) => {
+//         if (e.keyCode === 13) {
+//           return EditUpdateTodo(state, e, todo.id);
+//         }
+//         return state;
+//       }}
+//       onblur={(state, e) => EditUpdateTodo(state, e, todo.id)}
+//       value={todo.value}
+//     />
+//   </li>
+// );
 
 export default TodoItem;
