@@ -1,5 +1,6 @@
-import { h } from 'hyperapp';
 import store from '../store';
+import { text } from 'hyperapp';
+import { div, input, label } from '@hyperapp/html';
 
 const ToggleAllTodo = (state, e) => {
   let isCheckedAll = e.target.previousSibling.checked;
@@ -13,11 +14,11 @@ const ToggleAllTodo = (state, e) => {
   return newState;
 };
 
-export default (props) => (
-  <div>
-    <input type="checkbox" className="toggle-all" id="toggle-all" />
-    <label htmlFor="toggle-all" onclick={(state, e) => ToggleAllTodo(state, e)}>
-      Mark all as complete
-    </label>
-  </div>
-);
+export default () =>
+  div({}, [
+    input({ type: 'checkbox', class: 'toggle-all', id: 'toggle-all' }),
+    label(
+      { for: 'toggle-all', onclick: (state, e) => ToggleAllTodo(state, e) },
+      text('Mark all as complete')
+    ),
+  ]);

@@ -1,10 +1,12 @@
+import { text } from 'hyperapp';
 import { div, section } from '@hyperapp/html';
 import TodoHeader from './todo-header';
 import TodoFooter from './todo-footer';
 import TodoInput from './todo-input';
-import TodoList from './todo-list';
+// import TodoList from './todo-list';
 import TodoFilter from './todo-filter';
 import TodoToggleAll from './todo-toggle-all';
+
 
 // const App = () => (state) => (
 //   <div class="container">
@@ -31,8 +33,11 @@ const App = (state) =>
       TodoHeader(),
       TodoInput(state),
       section({ class: 'main' }, [
-        TodoList({ todos: state.todos, filter: state.filter }),
+        state.todos && state.todos.filter((t) => !t.done).length > 0
+          ? TodoToggleAll(state)
+          : text(''),
       ]),
+      // TodoFilter(state)
     ]),
     TodoFooter(),
   ]);
