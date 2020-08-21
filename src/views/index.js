@@ -1,43 +1,19 @@
-import { text } from 'hyperapp';
-import { div, section } from '@hyperapp/html';
-import TodoHeader from './todo-header';
-import TodoFooter from './todo-footer';
-import TodoInput from './todo-input';
-// import TodoList from './todo-list';
-import TodoFilter from './todo-filter';
-import TodoToggleAll from './todo-toggle-all';
-
-
-// const App = () => (state) => (
-//   <div class="container">
-//     <section class="todoapp">
-//       <TodoHeader />
-//       <TodoInput state={state} />
-//       <section className="main">
-//         {state.todos.filter((t) => !t.done).length > 0 ? (
-//           <TodoToggleAll />
-//         ) : (
-//           ''
-//         )}
-//         <TodoList todos={state.todos} filter={state.filter} />
-//       </section>
-//       <TodoFilter state={state} />
-//     </section>
-//     <TodoFooter />
-//   </div>
-// );
+import { h } from 'hyperapp';
+import TodoHeader from './TodoHeader';
+import TodoFooter from './TodoFooter';
+import TodoInput from './TodoInput';
+import TodoSection from './TodoSection';
+import TodoList from './TodoList';
+import TodoFilter from './TodoFilter';
 
 const App = (state) =>
-  div({ class: 'container' }, [
-    section({ class: 'todoapp' }, [
+  h('div', { class: 'container' }, [
+    h('section', { class: 'todoapp' }, [
       TodoHeader(),
       TodoInput(state),
-      section({ class: 'main' }, [
-        state.todos && state.todos.filter((t) => !t.done).length > 0
-          ? TodoToggleAll(state)
-          : text(''),
-      ]),
-      // TodoFilter(state)
+      TodoSection(state),
+      TodoList({ todos: state.todos, filter: state.filter }),
+      TodoFilter(state),
     ]),
     TodoFooter(),
   ]);

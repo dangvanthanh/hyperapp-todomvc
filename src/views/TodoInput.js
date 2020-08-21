@@ -1,4 +1,4 @@
-import { div, input } from '@hyperapp/html';
+import { h } from 'hyperapp';
 import { ENTER_KEY, uuid } from '../utils';
 import store from '../store';
 
@@ -24,21 +24,19 @@ const AddTodo = (state, event) => {
 
 const OnKeyDown = (state, event) => {
   if (event.keyCode === ENTER_KEY && event.target.value !== '') {
-    return AddTodo(state, e);
+    return AddTodo(state, event);
   }
   return state;
 };
 
-const TodoInput = (props) =>
-  div({}, [
-    input({
+export default (props) =>
+  h('div', {}, [
+    h('input', {
       type: 'text',
       class: 'new-todo',
-      onkeydown: { OnKeyDown },
+      onkeydown: OnKeyDown,
       oninput: OnInput,
       value: props.input,
       placeholder: props.placeholder,
     }),
   ]);
-
-export default TodoInput;

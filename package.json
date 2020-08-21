@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/dangvanthanh/hyperapp-todomvc#readme",
   "dependencies": {
-    "@hyperapp/html": "^1.2.3",
     "hyperapp": "^2.0.4",
     "todomvc-app-css": "^2.3.0",
     "todomvc-common": "^1.0.5"
