@@ -4,7 +4,7 @@
   "description": "TodoMVC using Hyperapp",
   "main": "index.js",
   "scripts": {
-    "start": "parcel index.html --open",
+    "start": "parcel index.html",
     "build": "parcel build index.html"
   },
   "repository": {
@@ -26,5 +26,11 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-hyperapp": "^2.3.0",
     "parcel-bundler": "^1.12.4"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "trailingComma": "es5",
+    "semi": false,
+    "singleQuote": true
   }
 }

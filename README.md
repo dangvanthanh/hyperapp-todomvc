@@ -1,11 +1,14 @@
-# hyperapp-todomvc
+# Hyperapp TodoMVC
 
 > TodoMVC using Hyperapp
 
-
-## Getting started
+## Getting Started
 
 ```
-npm install
-npm start
+$ npm install
+$ npm start
 ```
+
+## License
+
+MIT © [Dang Van Thanh](http://dangthanh.org)
