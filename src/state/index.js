@@ -1,8 +1,8 @@
-import { FILTERINFO } from '../utils';
+import { FILTERINFO } from '../utils'
 
 export default {
   input: '',
   placeholder: 'What needs to be done?',
   todos: [],
-  filter: FILTERINFO.All
-};
+  filter: FILTERINFO.All,
+}

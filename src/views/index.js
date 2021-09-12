@@ -1,10 +1,10 @@
-import { h } from 'hyperapp';
-import TodoHeader from './TodoHeader';
-import TodoFooter from './TodoFooter';
-import TodoInput from './TodoInput';
-import TodoSection from './TodoSection';
-import TodoList from './TodoList';
-import TodoFilter from './TodoFilter';
+import { h } from 'hyperapp'
+import TodoHeader from './TodoHeader'
+import TodoFooter from './TodoFooter'
+import TodoInput from './TodoInput'
+import TodoSection from './TodoSection'
+import TodoList from './TodoList'
+import TodoFilter from './TodoFilter'
 
 const App = (state) =>
   h('div', { class: 'container' }, [
@@ -16,6 +16,6 @@ const App = (state) =>
       TodoFilter(state),
     ]),
     TodoFooter(),
-  ]);
+  ])
 
-export default App;
+export default App

@@ -2,6 +2,8 @@
 
 > TodoMVC using Hyperapp
 
+![](screenshot.png)
+
 ## Getting Started
 
 ```
@@ -11,4 +13,4 @@ $ npm start
 
 ## License
 
-MIT © [Dang Van Thanh](http://dangthanh.org)
+MIT © [Dang Van Thanh](https://dangthanh.org)

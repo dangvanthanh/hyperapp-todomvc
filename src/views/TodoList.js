@@ -1,6 +1,6 @@
-import { h } from 'hyperapp';
-import { FILTERINFO } from '../utils';
-import TodoItem from './TodoItem';
+import { h } from 'hyperapp'
+import { FILTERINFO } from '../utils'
+import TodoItem from './TodoItem'
 
 export default ({ todos, filter }) =>
   h(
@@ -8,11 +8,7 @@ export default ({ todos, filter }) =>
     { class: 'todo-list' },
     todos
       .filter((t) =>
-        filter === FILTERINFO.Completed
-          ? t.done
-          : filter === FILTERINFO.Active
-          ? !t.done
-          : filter === FILTERINFO.All
+        filter === FILTERINFO.Completed ? t.done : filter === FILTERINFO.Active ? !t.done : filter === FILTERINFO.All,
       )
-      .map((todo) => TodoItem(todo))
-  );
+      .map((todo) => TodoItem(todo)),
+  )

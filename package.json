@@ -2,36 +2,33 @@
   "name": "hyperapp-todomvc",
   "version": "1.0.0",
   "description": "TodoMVC using Hyperapp",
-  "main": "index.js",
+  "source": "src/index.html",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "start": "parcel",
+    "build": "parcel build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dangvanthanh/hyperapp-todomvc.git"
   },
-  "author": "Dang Van Thanh <dangvanthanh@dangthanh.org> (http://dangthanh.org)",
+  "author": "Dang Van Thanh <dangvanthanh@dangthanh.org> (https://dangthanh.org)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dangvanthanh/hyperapp-todomvc/issues"
   },
   "homepage": "https://github.com/dangvanthanh/hyperapp-todomvc#readme",
   "dependencies": {
-    "hyperapp": "^2.0.4",
-    "todomvc-app-css": "^2.3.0",
+    "hyperapp": "^2.0.19",
+    "todomvc-app-css": "^2.4.1",
     "todomvc-common": "^1.0.5"
   },
   "devDependencies": {
+    "@dangvanthanh/prettier-config": "^1.0.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-hyperapp": "^2.3.0",
-    "parcel-bundler": "^1.12.4",
-    "node-forge": ">=0.10.0"
+    "node-forge": "^0.10.0",
+    "parcel": "^2.0.0-rc.0"
   },
-  "prettier": {
-    "printWidth": 80,
-    "trailingComma": "es5",
-    "semi": false,
-    "singleQuote": true
-  }
+  "prettier": "@dangvanthanh/prettier-config"
 }

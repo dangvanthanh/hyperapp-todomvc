@@ -1,4 +1,3 @@
-import { h, text } from 'hyperapp';
+import { h, text } from 'hyperapp'
 
-export default () =>
-  h('header', { class: 'header' }, [h('h1', {}, text('todos'))]);
+export default () => h('header', { class: 'header' }, [h('h1', {}, text('todos'))])
