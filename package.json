@@ -1,34 +1,32 @@
 {
-  "name": "hyperapp-todomvc",
-  "version": "1.0.0",
-  "description": "TodoMVC using Hyperapp",
-  "source": "src/index.html",
-  "browserslist": "> 0.5%, last 2 versions, not dead",
-  "scripts": {
-    "start": "parcel",
-    "build": "parcel build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dangvanthanh/hyperapp-todomvc.git"
-  },
-  "author": "Dang Van Thanh <dangvanthanh@dangthanh.org> (https://dangthanh.org)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dangvanthanh/hyperapp-todomvc/issues"
-  },
-  "homepage": "https://github.com/dangvanthanh/hyperapp-todomvc#readme",
-  "dependencies": {
-    "hyperapp": "^2.0.19",
-    "todomvc-app-css": "^2.4.1",
-    "todomvc-common": "^1.0.5"
-  },
-  "devDependencies": {
-    "@dangvanthanh/prettier-config": "^1.0.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-hyperapp": "^2.3.0",
-    "node-forge": "^0.10.0",
-    "parcel": "^2.0.0-rc.0"
-  },
-  "prettier": "@dangvanthanh/prettier-config"
+	"name": "hyperapp-todomvc",
+	"version": "1.0.0",
+	"description": "TodoMVC using Hyperapp",
+	"source": "src/index.html",
+	"browserslist": "> 0.5%, last 2 versions, not dead",
+	"scripts": {
+		"dev": "parcel",
+		"build": "parcel build",
+		"lint": "biome lint ./src",
+		"format": "biome format ./src --write"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dangvanthanh/hyperapp-todomvc.git"
+	},
+	"author": "Dang Van Thanh <dangvanthanh@dangthanh.org> (https://dangthanh.org)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/dangvanthanh/hyperapp-todomvc/issues"
+	},
+	"homepage": "https://github.com/dangvanthanh/hyperapp-todomvc#readme",
+	"dependencies": {
+		"hyperapp": "^2.0.22",
+		"todomvc-app-css": "^2.4.3",
+		"todomvc-common": "^1.0.5"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"parcel": "^2.14.4"
+	}
 }

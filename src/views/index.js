@@ -7,15 +7,15 @@ import TodoList from './TodoList'
 import TodoFilter from './TodoFilter'
 
 const App = (state) =>
-  h('div', { class: 'container' }, [
-    h('section', { class: 'todoapp' }, [
-      TodoHeader(),
-      TodoInput(state),
-      TodoSection(state),
-      TodoList({ todos: state.todos, filter: state.filter }),
-      TodoFilter(state),
-    ]),
-    TodoFooter(),
-  ])
+	h('div', { class: 'container' }, [
+		h('section', { class: 'todoapp' }, [
+			TodoHeader(),
+			TodoInput(state),
+			TodoSection(state),
+			TodoList({ todos: state.todos, filter: state.filter }),
+			TodoFilter(state),
+		]),
+		TodoFooter(),
+	])
 
 export default App
